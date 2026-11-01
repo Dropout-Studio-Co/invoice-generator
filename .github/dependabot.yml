@@ -12,7 +12,9 @@ updates:
       github-actions:
         patterns: ["*"]
 
-  - package-ecosystem: npm
+  # Bun, not npm: npm's ecosystem does not update bun.lock, which would make
+  # every Dependabot PR fail `bun install --frozen-lockfile`.
+  - package-ecosystem: bun
     directory: /
     schedule:
       interval: weekly
