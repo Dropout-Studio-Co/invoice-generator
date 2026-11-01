@@ -64,14 +64,14 @@ http://localhost:8787/api/auth/callback/google
 
 ## Configuration
 
-| Variable | Purpose |
-| --- | --- |
-| `BETTER_AUTH_SECRET` | Signs sessions; generate a random value |
-| `BETTER_AUTH_URL` | App URL; must match the origin you use for OAuth |
-| `GOOGLE_CLIENT_ID` | Google OAuth client ID |
-| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret |
+| Variable               | Purpose                                                                                |
+| ---------------------- | -------------------------------------------------------------------------------------- |
+| `BETTER_AUTH_SECRET`   | Signs sessions; generate a random value                                                |
+| `BETTER_AUTH_URL`      | App URL; must match the origin you use for OAuth                                       |
+| `GOOGLE_CLIENT_ID`     | Google OAuth client ID                                                                 |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret                                                             |
 | `TOKEN_ENCRYPTION_KEY` | Base64 32-byte key that encrypts stored Cloudflare tokens; required for the AI copilot |
-| `AI_COPILOT_ENABLED` | Set to `"false"` to disable the AI copilot |
+| `AI_COPILOT_ENABLED`   | Set to `"false"` to disable the AI copilot                                             |
 
 The remote `db:*` commands read `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_DATABASE_ID`, and `CLOUDFLARE_D1_TOKEN` from `.env`.
 
