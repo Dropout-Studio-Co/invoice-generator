@@ -364,11 +364,8 @@ export const switchConversation = async (id: string): Promise<void> => {
 						args: tc.args,
 						status:
 							(result?.status as
-								| "applied"
-								| "rejected"
-								| "failed"
-								| "pending_confirmation"
-								| undefined) ?? "pending",
+								"applied" | "rejected" | "failed" | "pending_confirmation" | undefined) ??
+							"pending",
 						actionId: result?.actionId ?? null,
 						error: result?.error ?? null,
 						anomalies: [],

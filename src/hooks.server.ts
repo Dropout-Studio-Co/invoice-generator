@@ -92,8 +92,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	// Synthesizes BOTH user+session so /api/* routes (which gate via requireApiContext) also pass.
 	// The user row is upserted (onConflictDoNothing) so FK-bound app data has a real owner.
 	// MUST NEVER be enabled in production — it grants full unauthenticated access.
-	const isLocalDev =
-		event.url.hostname === "localhost" || event.url.hostname === "127.0.0.1";
+	const isLocalDev = event.url.hostname === "localhost" || event.url.hostname === "127.0.0.1";
 	if (isLocalDev && event.platform?.env?.E2E_BYPASS_AUTH === "true") {
 		const now = new Date();
 		const userId = "e2e-test-user";
