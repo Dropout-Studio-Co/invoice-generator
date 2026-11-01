@@ -4,7 +4,7 @@
 
 Generates batches of PDF invoices. Sign in with Google, configure a sender identity, add clients with service details and invoice months, then bulk-generate and download the PDFs individually or as a ZIP. An AI copilot drives the same client and invoice operations through natural-language commands.
 
-**Live**: https://invoice-generator.beyourahi.workers.dev
+**Live**: https://invoice-generator.dropoutstudio.co
 
 Part of the Dropout Studio tools, alongside [Order Processor](https://github.com/Dropout-Studio-Co/order-processor) and [Day Zero](https://github.com/Dropout-Studio-Co/day-zero) — same stack, same Dropout Design System.
 
@@ -120,7 +120,7 @@ wrangler deploy
 2. Create an OAuth 2.0 Client ID (Web application)
 3. Add authorized redirect URIs:
    - `http://localhost:8787/api/auth/callback/google` (local — Wrangler dev server)
-   - `https://invoice-generator.beyourahi.workers.dev/api/auth/callback/google` (production)
+   - `https://invoice-generator.dropoutstudio.co/api/auth/callback/google` (production)
 
 ---
 
