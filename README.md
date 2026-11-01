@@ -1,36 +1,27 @@
 # Invoice Generator
 
-> Every client's monthly invoices, made and downloaded at once.
+Create every client's invoice for the month in one go, then download them all together.
 
-Generates batches of PDF invoices. Sign in with Google, configure a sender identity, add clients with service details and invoice months, then bulk-generate and download the PDFs individually or as a ZIP. An AI copilot drives the same client and invoice operations through natural-language commands.
+A small web app for freelancers and studios. It turns your sender details, clients, monthly line items, and payment methods into matching PDF invoices.
 
-**Live**: https://invoice-generator.dropoutstudio.co
+## What you can do
 
-Part of the Dropout Studio tools, alongside [Order Processor](https://github.com/Dropout-Studio-Co/order-processor) and [Day Zero](https://github.com/Dropout-Studio-Co/day-zero) — same stack, same Dropout Design System.
+- Save your sender details and payment methods once: bank transfer, bKash, Nagad, Rocket, Wise, Payoneer, PayPal, or custom.
+- Add clients with an invoice prefix, service description, amount, currency (BDT or USD), and one or more months.
+- Preview an invoice, then generate every active invoice in one run.
+- Download invoices individually, into a folder you choose, or as a single ZIP file.
+- Optionally sign in to sync across devices and use an AI copilot for edits.
 
----
+## Requirements
 
-## Tech Stack
+- [Bun](https://bun.sh) 1.2 or newer
+- Node.js 20.19+ or 22.12+
+- A Cloudflare account with a D1 database named `invoice_generator` (for sign-in and sync)
+- A Google Cloud OAuth 2.0 client (for Google sign-in)
 
-| Layer              | Technology                                       |
-| ------------------ | ------------------------------------------------ |
-| Framework          | SvelteKit 2 + Svelte 5 (runes)                   |
-| Language           | TypeScript (strict)                              |
-| Styling            | Tailwind CSS v4                                  |
-| UI / Design System | Dropout Design System (vendored) + shadcn-svelte |
-| Auth               | Better Auth (Google OAuth)                       |
-| Database           | Cloudflare D1 + Drizzle ORM                      |
-| AI Copilot         | Cloudflare Workers AI                            |
-| PDF                | html2canvas + jsPDF                              |
-| ZIP                | fflate                                           |
-| Deployment         | Cloudflare Workers                               |
-| Package manager    | Bun                                              |
-
----
+You can use the app without an account or any Cloudflare setup; data is then saved in your browser only.
 
 ## Setup
-
-**Prerequisites**: Bun, a Cloudflare account with a D1 database named `invoice_generator`, a Google Cloud OAuth 2.0 client.
 
 ```bash
 git clone https://github.com/Dropout-Studio-Co/invoice-generator.git
@@ -38,100 +29,62 @@ cd invoice-generator
 bun install
 ```
 
-Create `.dev.vars` at the project root (Worker runtime secrets, read by the dev server):
+Create `.dev.vars` in the project root and fill in the values:
 
 ```dotenv
-BETTER_AUTH_SECRET=      # openssl rand -base64 32
+BETTER_AUTH_SECRET=      # generate with: openssl rand -base64 32
 BETTER_AUTH_URL=http://localhost:8787
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 ```
 
-Apply migrations and start:
+Apply the database migrations to your local D1 database:
 
 ```bash
 bun run db:migrate:local
-bun run dev              # http://localhost:5173
 ```
 
-Google sign-in runs against the Wrangler-backed server — use `bun run preview` (`:8787`) for full auth testing, and set `BETTER_AUTH_URL=http://localhost:8787` to match.
-
----
-
-## Environment Variables
-
-Two gitignored files at the project root, each read by a different tool. Never commit either.
-
-`.dev.vars` — Worker runtime secrets, loaded by the dev server and Wrangler:
-
-| Variable               | Description                                    |
-| ---------------------- | ---------------------------------------------- |
-| `BETTER_AUTH_SECRET`   | Random secret for session signing              |
-| `BETTER_AUTH_URL`      | App base URL — `http://localhost:8787` locally |
-| `GOOGLE_CLIENT_ID`     | Google OAuth client ID                         |
-| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret                     |
-
-`.env` — Cloudflare credentials for the Drizzle CLI, used only by the remote `db:*` commands (loaded by Bun):
-
-| Variable                 | Description                                  |
-| ------------------------ | -------------------------------------------- |
-| `CLOUDFLARE_ACCOUNT_ID`  | Cloudflare account ID                        |
-| `CLOUDFLARE_DATABASE_ID` | D1 database ID                               |
-| `CLOUDFLARE_D1_TOKEN`    | Cloudflare API token with D1 edit permission |
-
-In production, set the `.dev.vars` values as Worker secrets via `wrangler secret put`; `BETTER_AUTH_URL` is a non-secret binding in `wrangler.jsonc`.
-
----
-
-## Scripts
-
-| Script                     | Description                                   |
-| -------------------------- | --------------------------------------------- |
-| `bun run dev`              | Dev server on `:5173`                         |
-| `bun run preview`          | Wrangler local preview on `:8787` (full auth) |
-| `bun run build`            | Production build                              |
-| `bun run check`            | Type & Svelte checking (svelte-check)         |
-| `bun run lint`             | ESLint                                        |
-| `bun run format`           | Prettier auto-format                          |
-| `bun run cf-typegen`       | Regenerate Cloudflare types                   |
-| `bun run db:generate`      | Generate migration from schema changes        |
-| `bun run db:migrate`       | Apply migrations to production D1             |
-| `bun run db:migrate:local` | Apply migrations to local D1                  |
-
----
-
-## Deployment
-
-Set production secrets, then build and deploy:
+## Run
 
 ```bash
-wrangler secret put BETTER_AUTH_SECRET
-wrangler secret put GOOGLE_CLIENT_ID
-wrangler secret put GOOGLE_CLIENT_SECRET
-bun run build
-wrangler deploy
+bun run dev
 ```
 
----
+Open http://localhost:5173. The dev server binds the local D1 database through `wrangler.jsonc`, so sign-in works here too. To test the production build, use the Wrangler-backed preview:
 
-## Google OAuth Setup
+```bash
+bun run preview
+```
 
-1. Go to [Google Cloud Console](https://console.cloud.google.com) → APIs & Services → Credentials
-2. Create an OAuth 2.0 Client ID (Web application)
-3. Add authorized redirect URIs:
-   - `http://localhost:8787/api/auth/callback/google` (local — Wrangler dev server)
-   - `https://invoice-generator.dropoutstudio.co/api/auth/callback/google` (production)
+Open http://localhost:8787. Keep `BETTER_AUTH_URL=http://localhost:8787` and add this redirect URI to your Google OAuth client:
 
----
+```text
+http://localhost:8787/api/auth/callback/google
+```
 
-## Contributing
+## Configuration
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for local setup, architecture guidelines, coding standards, and the commit and PR workflow.
+| Variable | Purpose |
+| --- | --- |
+| `BETTER_AUTH_SECRET` | Signs sessions; generate a random value |
+| `BETTER_AUTH_URL` | App URL; must match the origin you use for OAuth |
+| `GOOGLE_CLIENT_ID` | Google OAuth client ID |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret |
+| `TOKEN_ENCRYPTION_KEY` | Base64 32-byte key that encrypts stored Cloudflare tokens; required for the AI copilot |
+| `AI_COPILOT_ENABLED` | Set to `"false"` to disable the AI copilot |
+
+The remote `db:*` commands read `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_DATABASE_ID`, and `CLOUDFLARE_D1_TOKEN` from `.env`.
+
+Never commit `.dev.vars` or `.env`; they contain secrets. `E2E_BYPASS_AUTH` is for local testing only and must never be enabled in production.
+
+## Troubleshooting
+
+**Sign-in does nothing under `bun run dev`.** Run `bun run db:migrate:local` first so the local database has tables, then check `BETTER_AUTH_SECRET` and the Google values in `.dev.vars`.
+
+**Google sign-in fails with a redirect error.** Add the callback URI above to your OAuth client, and make sure `BETTER_AUTH_URL` matches the origin you opened.
+
+**The Generate button stays disabled.** Every client needs a name and an invoice prefix, and the client and invoice must be active.
 
 ## License
 
 MIT — see [LICENSE](./LICENSE).
-
-## Author
-
-**Rahi Khan** · [beyourahi.com](https://beyourahi.com) · [beyourahi@gmail.com](mailto:beyourahi@gmail.com)
