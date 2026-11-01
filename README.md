@@ -6,7 +6,7 @@ Generates batches of PDF invoices. Sign in with Google, configure a sender ident
 
 **Live**: https://invoice-generator.beyourahi.workers.dev
 
-Part of the Dropout Studio tools, alongside [Order Processor](https://github.com/beyourahi/order-processor) and [Day Zero](https://github.com/beyourahi/day-zero) — same stack, same Dropout Design System.
+Part of the Dropout Studio tools, alongside [Order Processor](https://github.com/Dropout-Studio-Co/order-processor) and [Day Zero](https://github.com/Dropout-Studio-Co/day-zero) — same stack, same Dropout Design System.
 
 ---
 
@@ -33,7 +33,7 @@ Part of the Dropout Studio tools, alongside [Order Processor](https://github.com
 **Prerequisites**: Bun, a Cloudflare account with a D1 database named `invoice_generator`, a Google Cloud OAuth 2.0 client.
 
 ```bash
-git clone https://github.com/beyourahi/invoice-generator.git
+git clone https://github.com/Dropout-Studio-Co/invoice-generator.git
 cd invoice-generator
 bun install
 ```
