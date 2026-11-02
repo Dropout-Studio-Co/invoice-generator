@@ -427,7 +427,7 @@ Consult MCP tools in this priority order:
    - `list-sections` → discover doc sections
    - `get-documentation` → fetch relevant sections
    - `svelte-autofixer` → **mandatory** before delivering Svelte code
-3. **Web search** — last resort
+2. **Web search** — last resort
 
 Never use `shopify-dev` MCP (this is not a Shopify project).
 

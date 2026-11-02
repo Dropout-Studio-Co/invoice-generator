@@ -13,7 +13,7 @@
 	href="/login"
 	class={cn(
 		"sleek border-hair bg-card text-foreground group flex h-10 touch-manipulation items-center gap-2 rounded-full border px-4 text-sm font-medium whitespace-nowrap backdrop-blur-sm",
-		"ease-[var(--ease)] transition-colors active:scale-95 motion-reduce:transition-none",
+		"transition-colors ease-[var(--ease)] active:scale-95 motion-reduce:transition-none",
 		"pointer-fine:hover:border-signal/50 focus-visible:outline-signal focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
 	)}
 >

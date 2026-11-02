@@ -1,0 +1,38 @@
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Etc/UTC
+    groups:
+      github-actions:
+        patterns: ["*"]
+
+  # Bun, not npm: npm's ecosystem does not update bun.lock, which would make
+  # every Dependabot PR fail `bun install --frozen-lockfile`.
+  - package-ecosystem: bun
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:15"
+      timezone: Etc/UTC
+    open-pull-requests-limit: 5
+    groups:
+      runtime-minor-patch:
+        dependency-type: production
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+      development-minor-patch:
+        dependency-type: development
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+    ignore:
+      # Majors are reviewed by hand: SvelteKit, Vite, Tailwind and TypeScript
+      # majors need migration work that Dependabot cannot validate.
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]

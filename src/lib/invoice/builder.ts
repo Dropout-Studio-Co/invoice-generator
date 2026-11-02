@@ -11,6 +11,7 @@ import type { Client, Fixed, InvoiceEntry, SavedPaymentMethod } from "$lib/types
 import { defaultTheme as theme } from "$lib/themes/default";
 import { getMethodDef } from "$lib/payments/registry";
 import { formatAmount } from "$lib/format/currency";
+import { sanitizeFileSegment } from "$lib/format/filename";
 import { MONTH_TO_NUMBER } from "./months";
 import { resolveTokens } from "./resolver";
 
@@ -114,7 +115,10 @@ export const getInvoiceId = (client: Client, entry: InvoiceEntry): string => {
 	return `${client.invoicePrefix}-${mm}${entry.issueDay}-${client.year}`;
 };
 
+// The prefix is user text, so it is sanitized for the download/ZIP name only —
+// the invoice ID above stays verbatim for display on the document.
 export const getFileName = (client: Client, entry: InvoiceEntry): string => {
 	const mm = MONTH_TO_NUMBER[entry.month];
-	return `invoice-${client.invoicePrefix}-${mm}${entry.issueDay}-${client.year}.pdf`;
+	const prefix = sanitizeFileSegment(client.invoicePrefix);
+	return `invoice-${prefix}-${mm}${entry.issueDay}-${client.year}.pdf`;
 };

@@ -11,11 +11,7 @@ import type { z } from "zod";
 export type SafetyTier = "A" | "B";
 
 export type AnomalyKey =
-	| "AmountOutlier"
-	| "VolumeSurge"
-	| "MissingPaymentMethods"
-	| "StalePeriod"
-	| "CurrencyMismatch";
+	"AmountOutlier" | "VolumeSurge" | "MissingPaymentMethods" | "StalePeriod" | "CurrencyMismatch";
 
 export interface AnomalyResult {
 	key: AnomalyKey;

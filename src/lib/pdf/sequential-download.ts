@@ -10,6 +10,7 @@
  * `cancelled: true`, not an error.
  */
 import type { GeneratedInvoice } from "$lib/types";
+import { sanitizeFileSegment } from "$lib/format/filename";
 import { downloadBlob } from "$lib/utils";
 
 export interface DownloadGroup {
@@ -26,12 +27,7 @@ export interface DownloadResult {
 
 // Local shims for the File System Access API (not in the ambient TS lib).
 type DirectoryPickerStartIn =
-	| "desktop"
-	| "documents"
-	| "downloads"
-	| "music"
-	| "pictures"
-	| "videos";
+	"desktop" | "documents" | "downloads" | "music" | "pictures" | "videos";
 
 interface DirectoryPickerOptions {
 	mode?: "read" | "readwrite";
@@ -117,9 +113,10 @@ const writeGroupsToDirectory = async (
 			continue;
 		}
 
-		const folder = await invoicesRoot.getDirectoryHandle(uniqueKey(rootUsed, group.folderName), {
-			create: true
-		});
+		const folder = await invoicesRoot.getDirectoryHandle(
+			uniqueKey(rootUsed, sanitizeFileSegment(group.folderName)),
+			{ create: true }
+		);
 		const folderUsed = new Set<string>();
 		for (const invoice of group.invoices) {
 			const [base, ext] = splitFileName(invoice.fileName);

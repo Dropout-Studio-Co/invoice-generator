@@ -39,8 +39,7 @@ export interface RawChatResult {
 }
 
 type ContentPart =
-	| { type: "text"; text: string }
-	| { type: "image_url"; image_url: { url: string } };
+	{ type: "text"; text: string } | { type: "image_url"; image_url: { url: string } };
 
 const buildToolsPayload = (tools: ToolCatalogEntry[]) =>
 	tools.map((t) => ({

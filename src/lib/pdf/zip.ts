@@ -7,6 +7,7 @@
  * compressed, so deflating wastes CPU for ~no size win.
  */
 import { zipSync, type Zippable } from "fflate";
+import { sanitizeFileSegment } from "$lib/format/filename";
 import {
 	countFiles,
 	INVOICES_ROOT_FOLDER,
@@ -43,7 +44,7 @@ const buildZippable = async (groups: DownloadGroup[]): Promise<Zippable> => {
 			const [base, ext] = splitFileName(invoice.fileName);
 			folder[uniqueKey(folderUsed, base, ext)] = await blobToBytes(invoice.pdfBlob);
 		}
-		root[uniqueKey(rootUsed, group.folderName)] = folder;
+		root[uniqueKey(rootUsed, sanitizeFileSegment(group.folderName))] = folder;
 	}
 
 	return { [INVOICES_ROOT_FOLDER]: root };

@@ -177,8 +177,7 @@ const buildConfirmationDetail = (
 		case "updateInvoiceEntry": {
 			const client = session.clients.find((x) => x.id === a.clientId);
 			const entry = client?.invoices.find((x) => x.id === a.entryId) as
-				| Record<string, unknown>
-				| undefined;
+				Record<string, unknown> | undefined;
 			const patch = (a.patch as Record<string, unknown>) ?? {};
 			for (const [key, value] of Object.entries(patch)) {
 				diff.push({
