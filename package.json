@@ -64,15 +64,15 @@
 		"wrangler": "^4.123.0"
 	},
 	"dependencies": {
-		"@better-auth/passkey": "1.6.27",
-		"better-auth": "^1.6.27",
-		"drizzle-orm": "^0.45.2",
+		"@better-auth/passkey": "1.7.14",
+		"better-auth": "^1.7.14",
+		"drizzle-orm": "^0.45.4",
 		"fflate": "^0.8.3",
 		"gsap": "^3.15.0",
 		"html2canvas": "^1.4.1",
 		"jspdf": "^4.2.1",
-		"svelte-sonner": "^1.1.1",
+		"svelte-sonner": "^1.2.2",
 		"vaul-svelte": "^0.3.2",
-		"zod": "^4.4.3"
+		"zod": "^4.6.7"
 	}
 }
