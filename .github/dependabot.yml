@@ -11,6 +11,12 @@ updates:
     groups:
       github-actions:
         patterns: ["*"]
+    # Majors are deliberate migrations, so they are ignored here rather than
+    # proposed weekly. `ignore` filters version updates only; Dependabot security
+    # updates are unaffected and still open on their own.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
   # Bun, not npm: npm's ecosystem does not update bun.lock, which would make
   # every Dependabot PR fail `bun install --frozen-lockfile`.
