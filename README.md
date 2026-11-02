@@ -15,7 +15,7 @@ A small web app for freelancers and studios. It turns your sender details, clien
 ## Requirements
 
 - [Bun](https://bun.sh) 1.2 or newer
-- Node.js 20.19+ or 22.12+
+- Node.js 22.12 or newer
 - A Cloudflare account with a D1 database named `invoice_generator` (for sign-in and sync)
 - A Google Cloud OAuth 2.0 client (for Google sign-in)
 
