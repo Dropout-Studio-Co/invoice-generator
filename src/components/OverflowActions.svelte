@@ -4,13 +4,15 @@
 	because the menu sits inside those cards' clickable headers.
 -->
 <script lang="ts">
-	import type { Component, ComponentProps } from "svelte";
 	import * as Dialog from "$lib/components/ui/dialog";
 	import { cn } from "$lib/utils";
 	import { Eyebrow } from "$lib/ds";
-	import { MoreVertical, type Icon as LucideIcon } from "@lucide/svelte";
+	import { MoreVertical, type LucideIcon } from "@lucide/svelte";
 
-	type IconComponent = Component<ComponentProps<typeof LucideIcon>>;
+	// LucideIcon is the exported "an icon component" type (`Component<LucideProps>`). Do not use
+	// `ComponentProps<typeof Icon>`: the generic Icon takes a discriminated icon/iconNode union,
+	// which concrete icons do not satisfy.
+	type IconComponent = LucideIcon;
 
 	export interface OverflowAction {
 		label: string;
