@@ -90,7 +90,15 @@ export const createAuth = (d1: D1Database, env: AuthEnv) => {
 		},
 		advanced: {
 			cookiePrefix: "invoice-generator",
-			useSecureCookies: true
+			useSecureCookies: true,
+			// Better Auth 1.7 resolves the client IP from `x-forwarded-for` alone, and a
+			// header with more than one value (a client-supplied XFF that Cloudflare
+			// appends to) resolves to no IP at all — the rate limiter then collapses every
+			// caller into one shared per-path bucket. Cloudflare overwrites
+			// `cf-connecting-ip` at the edge, so it is single-valued and cannot be spoofed.
+			ipAddress: {
+				ipAddressHeaders: ["cf-connecting-ip"]
+			}
 		},
 		// OAuth callbacks/CSRF are rejected from origins not listed here; the two localhost
 		// ports cover Vite dev (5173) and Wrangler preview (8787), plus the branded domain.
