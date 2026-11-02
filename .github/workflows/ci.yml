@@ -66,20 +66,23 @@ jobs:
 
       - uses: ./.github/actions/setup
 
-      # Non-blocking by design: every advisory today is in a dev/build toolchain
-      # dependency (wrangler/miniflare, vite, zod through better-auth) with no
-      # non-breaking upgrade available. The report still fails the step visibly;
-      # remove continue-on-error once the ecosystem patches land.
-      - name: Dependency audit (high and critical)
+      # BLOCKING at critical only. A critical advisory means a dependency this app
+      # actually ships has a known exploit and needs review; that must fail the PR.
+      # Highs and below are printed by `bun audit` but deliberately do not gate: after
+      # the 2026-11 dependency bump nothing above moderate is left, and what remains is
+      # dev/build toolchain only — esbuild (through drizzle-kit, vite's tsx, wrangler)
+      # and minimatch (through eslint/typescript-eslint) — plus three lows blocked
+      # behind an upstream major (SvelteKit 3, its cookie, deepmerge via
+      # vite-plugin-svelte). Gating on those would only train people to bypass the step.
+      - name: Dependency audit (critical only)
         id: audit
-        continue-on-error: true
-        run: bun audit --audit-level=high
+        run: bun audit --audit-level=critical
 
       - name: Restore lint caches
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: node_modules/.cache/lint
-          key: lint-${{ runner.os }}-${{ hashFiles('bun.lock', '.prettierrc', '.prettierignore', 'eslint.config.js', 'svelte.config.js') }}-${{ github.sha }}
+          key: lint-${{ runner.os }}-${{ hashFiles('bun.lock', '.prettierrc', '.prettierignore', 'eslint.config.js', 'svelte.config.js') }}
           restore-keys: lint-${{ runner.os }}-${{ hashFiles('bun.lock', '.prettierrc', '.prettierignore', 'eslint.config.js', 'svelte.config.js') }}-
 
       - name: Check formatting and lint
@@ -103,7 +106,7 @@ jobs:
             echo "| Check | Result |"
             echo "| --- | --- |"
             echo "| Secret scan (${RANGE:-all history}) | ${SECRETS_OUTCOME} |"
-            echo "| Dependency audit (high, non-blocking) | ${AUDIT_OUTCOME} |"
+            echo "| Dependency audit (critical, blocking) | ${AUDIT_OUTCOME} |"
             echo "| Prettier + ESLint | ${LINT_OUTCOME} |"
           } >> "$GITHUB_STEP_SUMMARY"
 
