@@ -8,7 +8,7 @@
 	},
 	"scripts": {
 		"dev": "vite dev --open --host",
-		"sync-ds": "rsync -a --delete ../../dropout-design-system/src/lib/ ./src/lib/ds/",
+		"sync-ds": "dropout-ds-sync --apply .",
 		"build": "vite build",
 		"preview": "bun run build && wrangler dev",
 		"prepare": "svelte-kit sync || echo ''",
