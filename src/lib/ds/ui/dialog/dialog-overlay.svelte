@@ -9,7 +9,7 @@
 	bind:ref
 	data-slot="dialog-overlay"
 	class={cn(
-		"data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 bg-scrim-soft fixed inset-0 isolate z-50 duration-100 supports-backdrop-filter:backdrop-blur-xs",
+		"data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 bg-scrim-soft motion-safe:duration-base motion-safe:ease-standard fixed inset-0 isolate z-50 supports-backdrop-filter:backdrop-blur-xs",
 		className
 	)}
 	{...restProps}

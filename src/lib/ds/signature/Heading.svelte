@@ -43,9 +43,15 @@
 	};
 
 	const safeWeight = $derived(Math.min(weight, numeral ? 700 : 600));
-	const style = $derived(`font-variation-settings: 'opsz' ${opsz}, 'wght' ${safeWeight};`);
+	const style = $derived(
+		`font-weight: ${safeWeight}; font-variation-settings: 'opsz' ${opsz}, 'wght' ${safeWeight};`
+	);
 </script>
 
-<svelte:element this={as} class={cn(sizeClass[size], "leading-heading text-foreground", className)} {style}>
+<svelte:element
+	this={as}
+	class={cn(sizeClass[size], "leading-heading text-foreground min-w-0 text-balance wrap-anywhere", className)}
+	{style}
+>
 	{@render children()}
 </svelte:element>

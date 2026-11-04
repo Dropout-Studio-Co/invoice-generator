@@ -1,9 +1,9 @@
 /**
- * @dropout/ds — public entry point.
+ * Dropout DS — private vendored entry point.
  *
- * Products consume the vendored source through this barrel. Import tokens once
- * from `styles/tokens.css`; generic controls live in `ui`, Dropout language in
- * `signature`, and reusable compositions in `patterns`.
+ * Authorized consumers use this barrel for canonical controls, Dropout language,
+ * reusable compositions, and compatibility aliases. Import tokens once from
+ * `styles/tokens.css`; advanced anatomy lives under the explicit `ui` entry.
  */
 export { cn } from "./utils";
 export { Button, buttonVariants } from "./ui/button";
@@ -23,17 +23,13 @@ export {
 	Select,
 	Spinner
 } from "./ui";
-export { default as Cta } from "./signature/Cta.svelte";
-export { default as IconButton } from "./signature/IconButton.svelte";
-export { default as Heading } from "./signature/Heading.svelte";
-export { default as Eyebrow } from "./signature/Eyebrow.svelte";
-export { default as StatusBadge } from "./signature/StatusBadge.svelte";
-export { default as Tile } from "./signature/Tile.svelte";
-export { default as SettingsSection } from "./patterns/SettingsSection.svelte";
-export { default as SettingsRow } from "./patterns/SettingsRow.svelte";
-export { default as SettingsActions } from "./patterns/SettingsActions.svelte";
-export { default as SettingsSaveBar } from "./patterns/SettingsSaveBar.svelte";
-export { motion, prefersReducedMotion } from "./motion";
+export { Cta, Eyebrow, Heading, IconButton, StatusBadge, Tile } from "./signature";
+export { SettingsActions, SettingsRow, SettingsSaveBar, SettingsSection } from "./patterns";
+export { IconTrigger } from "./icons";
+export * as BrandIcons from "./icons/brand";
+export * as CustomIcons from "./icons/custom";
+export * as MovingIcons from "./icons/moving";
+export type { BrandIconProps, IconProps, IconSize } from "./icons/types";
 export {
 	AlertDialog,
 	Badge,
@@ -51,7 +47,6 @@ export {
 	Popover,
 	Progress,
 	RadioGroup,
-	SelectPrimitive,
 	Sheet,
 	Skeleton,
 	Sonner,
@@ -60,6 +55,7 @@ export {
 	Tabs,
 	Tooltip
 } from "./ui";
+export { motion, prefersReducedMotion } from "./motion";
 export {
 	inputBase,
 	labelBase,

@@ -1,16 +1,18 @@
 <script lang="ts">
+	import { getContext } from "svelte";
 	import Check from "@lucide/svelte/icons/check";
 	import Minus from "@lucide/svelte/icons/minus";
 	import type { HTMLInputAttributes } from "svelte/elements";
 	import { cn } from "../utils";
 	import { helperBase } from "../styles/recipes";
+	import { FIELD_CONTEXT, mergeDescribedBy, type FieldContext } from "./field-context";
 
 	/**
 	 * The canonical checkbox: one native control with a branded indicator, native
 	 * form submission, and a 44px target for pointer and keyboard interaction.
 	 */
 	const uid = $props.id();
-
+	const field = getContext<FieldContext | undefined>(FIELD_CONTEXT);
 	let {
 		checked = $bindable(false),
 		indeterminate = $bindable(false),
@@ -23,8 +25,8 @@
 		"aria-labelledby": ariaLabelledby,
 		"aria-describedby": ariaDescribedby,
 		"aria-invalid": ariaInvalid,
-		required = false,
-		disabled = false,
+		required,
+		disabled,
 		readonly = false,
 		onclick,
 		...rest
@@ -40,22 +42,25 @@
 		value?: string | number | boolean;
 	} = $props();
 
-	const checkboxId = $derived(id ?? `checkbox-${uid}`);
+	const fieldProps = $derived(field?.props);
+	const checkboxId = $derived(id ?? fieldProps?.id ?? `checkbox-${uid}`);
+	const controlRequired = $derived(required ?? fieldProps?.required ?? false);
+	const controlDisabled = $derived(disabled ?? fieldProps?.disabled ?? false);
 	const descriptionId = $derived(description ? `${checkboxId}-description` : undefined);
-	const describedBy = $derived([ariaDescribedby, descriptionId].filter(Boolean).join(" ") || undefined);
-	const invalid = $derived(ariaInvalid === true || ariaInvalid === "true");
+	const describedBy = $derived(mergeDescribedBy(fieldProps?.["aria-describedby"], ariaDescribedby, descriptionId));
+	const invalid = $derived(ariaInvalid === true || ariaInvalid === "true" || fieldProps?.["aria-invalid"] === "true");
 	const inputClass =
-		"peer absolute inset-0 z-10 size-11 cursor-pointer appearance-none rounded-control opacity-0 disabled:cursor-not-allowed";
+		"peer absolute inset-0 z-10 size-11 cursor-pointer appearance-none rounded-control opacity-0 focus-visible:outline-none disabled:cursor-not-allowed";
 	const indicatorClass =
-		"pointer-events-none flex size-5 items-center justify-center rounded-[5px] border-2 motion-safe:transition-colors motion-safe:duration-fast motion-safe:ease-standard peer-focus-visible:outline-2 peer-focus-visible:outline-offset-[14px] peer-focus-visible:outline-ring peer-disabled:opacity-50 motion-safe:peer-active:scale-95 peer-active:opacity-80";
+		"pointer-events-none flex size-5 items-center justify-center rounded-choice bg-(--ds-control-background) motion-safe:transition-colors motion-safe:duration-fast motion-safe:ease-standard peer-focus-visible:bg-focus-surface! peer-focus-visible:text-focus-foreground! peer-disabled:text-disabled-foreground peer-disabled:bg-disabled-background peer-active:opacity-80";
 	const indicatorClassFor = (isChecked: boolean, isIndeterminate: boolean) =>
 		cn(
 			indicatorClass,
 			invalid
-				? "border-destructive bg-destructive/10 text-destructive"
+				? "bg-destructive/20 text-destructive"
 				: isChecked || isIndeterminate
-					? "border-signal bg-signal text-background"
-					: "border-input bg-transparent text-transparent peer-hover:border-ring"
+					? "bg-signal text-background"
+					: "text-transparent peer-hover:surface-control-hover"
 		);
 	const handleClick: NonNullable<HTMLInputAttributes["onclick"]> = event => {
 		if (readonly) event.preventDefault();
@@ -72,14 +77,14 @@
 			id={checkboxId}
 			type="checkbox"
 			value={value == null ? undefined : String(value)}
-			required={required ?? false}
-			disabled={disabled ?? false}
-			aria-label={ariaLabel ?? label}
+			required={controlRequired}
+			disabled={controlDisabled}
+			aria-label={ariaLabel ?? (!ariaLabelledby ? label : undefined)}
 			aria-labelledby={ariaLabelledby}
 			aria-describedby={describedBy}
-			aria-invalid={ariaInvalid}
+			aria-invalid={ariaInvalid ?? (invalid ? "true" : undefined)}
 			aria-checked={indeterminate ? "mixed" : checked}
-			aria-required={required ? "true" : undefined}
+			aria-required={controlRequired ? "true" : undefined}
 			aria-readonly={readonly ? "true" : undefined}
 			data-state={indeterminate ? "indeterminate" : checked ? "checked" : "unchecked"}
 			data-readonly={readonly ? "" : undefined}
@@ -100,10 +105,12 @@
 		{@render checkboxInput()}
 		<label
 			for={checkboxId}
-			class="text-label text-foreground flex min-h-11 flex-1 cursor-pointer flex-col gap-1 pl-3"
+			class="text-label text-foreground flex min-h-11 flex-1 cursor-pointer flex-col gap-1 ps-3"
 		>
 			<span>{label}</span>
-			{#if description}<span id={descriptionId} class={helperBase}>{description}</span>{/if}
+			{#if description}<span id={descriptionId} class={cn(helperBase, "text-muted-foreground")}
+					>{description}</span
+				>{/if}
 		</label>
 	</div>
 {:else}{@render checkboxInput()}{/if}

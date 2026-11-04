@@ -21,8 +21,8 @@
 
 <span
 	class={cn(
-		"text-caption inline-flex max-w-full items-center justify-center gap-1.5 rounded-full border px-2.5 py-1 text-center leading-4 tracking-[0.08em] whitespace-normal uppercase",
-		tone === "connected" ? "border-status-connected/40 text-foreground" : "border-hair text-ink-muted",
+		"text-caption inline-flex max-w-full items-center justify-center gap-1.5 rounded-full px-2.5 py-1 text-center leading-4 tracking-[0.08em] whitespace-normal uppercase",
+		tone === "connected" ? "bg-status-connected/20 text-foreground" : "surface-control text-muted-foreground",
 		className
 	)}
 >

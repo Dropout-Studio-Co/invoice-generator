@@ -1,15 +1,14 @@
 <script lang="ts" module>
-	import { tv, type VariantProps } from "tailwind-variants";
+	import { type VariantProps } from "tailwind-variants";
+	import { tv } from "../../tv";
 	export const inputGroupAddonVariants = tv({
-		base: "text-muted-foreground h-auto gap-2 py-1.5 text-sm font-medium group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)_-_5px)] [&>svg:not([class*='size-'])]:size-4 flex cursor-text items-center justify-center select-none",
+		base: "text-muted-foreground min-h-11 h-auto gap-2 px-3 py-2 text-label font-medium group-data-[disabled=true]/input-group:text-disabled-foreground group-data-[disabled=true]/input-group:opacity-100 [&>kbd]:rounded-choice [&>svg:not([class*='size-'])]:size-4 flex cursor-text items-center justify-center select-none",
 		variants: {
 			align: {
-				"inline-start": "pl-2 has-[>button]:ml-[-0.3rem] has-[>kbd]:ml-[-0.15rem] order-first",
-				"inline-end": "pr-2 has-[>button]:mr-[-0.3rem] has-[>kbd]:mr-[-0.15rem] order-last",
-				"block-start":
-					"px-2.5 pt-2 group-has-[>input]/input-group:pt-2 [.border-b]:pb-2 order-first w-full justify-start",
-				"block-end":
-					"px-2.5 pb-2 group-has-[>input]/input-group:pb-2 [.border-t]:pt-2 order-last w-full justify-start"
+				"inline-start": "ps-2 has-[>button]:ms-[-0.3rem] has-[>kbd]:ms-[-0.15rem] order-first",
+				"inline-end": "pe-2 has-[>button]:me-[-0.3rem] has-[>kbd]:me-[-0.15rem] order-last",
+				"block-start": "px-3 pt-2 group-has-[>input]/input-group:pt-2 order-first w-full justify-start",
+				"block-end": "px-3 pb-2 group-has-[>input]/input-group:pb-2 order-last w-full justify-start"
 			}
 		},
 		defaultVariants: {

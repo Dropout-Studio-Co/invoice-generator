@@ -20,7 +20,7 @@
 	{type}
 	variant="icon"
 	class={cn(
-		"sleek group bg-card cursor-pointer backdrop-blur-sm transition-colors",
+		"sleek group surface-control motion-safe:duration-fast motion-safe:ease-standard cursor-pointer backdrop-blur-sm motion-safe:transition-colors",
 		tone === "destructive" && "pointer-fine:hover:bg-destructive/10 pointer-fine:hover:text-destructive",
 		className
 	)}

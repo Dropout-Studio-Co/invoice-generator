@@ -6,18 +6,19 @@
 	let {
 		ref = $bindable(null),
 		class: className,
+		label = "More breadcrumbs",
 		...restProps
-	}: WithoutChildren<WithElementRef<HTMLAttributes<HTMLSpanElement>>> = $props();
+	}: WithoutChildren<WithElementRef<HTMLAttributes<HTMLSpanElement>>> & { label?: string } = $props();
 </script>
 
 <span
 	bind:this={ref}
 	data-slot="breadcrumb-ellipsis"
-	role="presentation"
-	aria-hidden="true"
+	role="img"
+	aria-label={label}
 	class={cn("flex size-5 items-center justify-center [&>svg]:size-4", className)}
 	{...restProps}
 >
-	<MoreHorizontalIcon />
-	<span class="sr-only">More</span>
+	<MoreHorizontalIcon aria-hidden="true" />
+	<span aria-hidden="true">{label}</span>
 </span>

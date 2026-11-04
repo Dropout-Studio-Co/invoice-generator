@@ -3,16 +3,16 @@
  * inputs, tiles, and pills. Exported so surfaces can be composed natively
  * (the way the live onboarding dialog does) as well as via the components.
  *
- * NOTE: these surfaces are tuned for the DARK canonical theme (faint white
- * raised fills, white hairlines). They read as intended on dark backgrounds.
+ * Contextual surfaces inherit a semantic fill from their immediate parent;
+ * state feedback uses fills, foreground, and opacity rather than strokes.
  */
 
-/** Text input / textarea / select. 16px on mobile (no iOS zoom); borderless raised fill (§3.1). */
+/** Text input / textarea / select. 16px on coarse inputs (no iOS zoom); contextual fill. */
 export const inputBase =
-	"field-control w-full border-2 border-transparent text-base leading-6 placeholder:text-ink-muted focus:border-ring focus:outline-none focus:surface-hover disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive lg:text-label lg:leading-5";
+	"field-control w-full text-base leading-6 placeholder:text-muted-foreground focus-visible:bg-focus-surface focus-visible:text-focus-foreground disabled:cursor-not-allowed aria-invalid:bg-destructive/20 aria-invalid:placeholder:text-foreground lg:pointer-fine:text-label lg:pointer-fine:leading-5";
 
 /** Field label — uppercase, micro. */
-export const labelBase = "mb-2.5 block text-micro text-ink-muted uppercase";
+export const labelBase = "mb-2.5 block text-micro text-muted-foreground uppercase";
 
 /**
  * Prose roles — one canonical class per role so surfaces stop hand-picking
@@ -23,18 +23,19 @@ export const labelBase = "mb-2.5 block text-micro text-ink-muted uppercase";
 /** Body copy / paragraphs / page intros. */
 export const bodyBase = "text-body leading-body text-foreground";
 /** Muted helper / hint / description text (under a field or section header). */
-export const helperBase = "text-caption leading-relaxed text-ink-muted text-pretty";
+export const helperBase = "text-caption leading-relaxed text-muted-foreground text-pretty";
 /** Quiet metadata — timestamps, counts, secondary table data. */
-export const metaBase = "text-caption text-ink-muted tabular-nums";
+export const metaBase = "text-caption text-muted-foreground tabular-nums";
 
 /** Selectable tile (radio/checkbox surface). Compose with selected/unselected. */
 export const tileBase =
-	"rounded-control border p-3 text-left transition-colors duration-base ease-standard focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal active:opacity-90";
-export const tileSelected = "border-signal bg-ink-2";
-export const tileUnselected = "border-hair surface-1 hover:border-ring hover:surface-hover";
+	"rounded-control p-3 text-left transition-colors duration-base ease-standard focus-visible:bg-focus-surface focus-visible:text-focus-foreground active:opacity-90";
+export const tileSelected = "surface-2 font-semibold text-foreground";
+export const tileUnselected = "surface-control hover:surface-control-hover";
 
 /** Choice pill (compact selectable chip). */
 export const pillBase =
-	"rounded-full border px-4 py-2 text-micro uppercase transition-colors duration-base ease-standard";
-export const pillSelected = "border-signal bg-signal font-semibold text-background";
-export const pillUnselected = "border-hair text-ink-muted hover:border-ring hover:text-foreground";
+	"inline-flex max-w-full min-w-0 items-center justify-center rounded-full px-4 py-2 text-micro text-center wrap-anywhere uppercase transition-colors duration-base ease-standard focus-visible:bg-focus-surface focus-visible:text-focus-foreground pointer-coarse:min-h-11";
+export const pillSelected = "bg-signal font-semibold text-background";
+export const pillUnselected =
+	"surface-control text-muted-foreground hover:surface-control-hover hover:text-foreground";

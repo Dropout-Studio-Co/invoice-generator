@@ -14,7 +14,7 @@
 	bind:ref
 	data-slot={dataSlot}
 	class={cn(
-		"bg-border shrink-0 data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch",
+		"shrink-0 data-horizontal:h-2 data-horizontal:w-full data-vertical:w-2 data-vertical:self-stretch",
 		className
 	)}
 	{...restProps}

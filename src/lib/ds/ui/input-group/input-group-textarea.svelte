@@ -15,7 +15,7 @@
 	bind:ref
 	data-slot="input-group-control"
 	class={cn(
-		"flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none ring-0 focus-visible:ring-0 disabled:bg-transparent aria-invalid:ring-0 dark:bg-transparent dark:disabled:bg-transparent",
+		"focus-visible:bg-focus-surface! focus-visible:text-focus-foreground! flex-1 resize-none rounded-none bg-transparent py-2 disabled:bg-transparent forced-colors:bg-[Canvas] forced-colors:text-[CanvasText]",
 		className
 	)}
 	bind:value

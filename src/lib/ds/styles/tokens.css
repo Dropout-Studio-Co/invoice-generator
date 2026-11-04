@@ -29,11 +29,23 @@
 :root {
 	--pad: var(--spacing-shell-pad);
 	--maxw: var(--max-width);
-	--shell-x: max(var(--pad), calc((100% - var(--maxw)) / 2));
+	--shell-x: max(
+		var(--pad),
+		env(safe-area-inset-left, 0px),
+		env(safe-area-inset-right, 0px),
+		calc((100% - var(--maxw)) / 2)
+	);
 	--nav-h: var(--nav-height);
 	--nav-safe: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px));
 	--content-pad: var(--spacing-content-pad);
-	--content-x: max(var(--content-pad), calc((100% - var(--content-max)) / 2));
+	--content-x: max(
+		var(--content-pad),
+		env(safe-area-inset-left, 0px),
+		env(safe-area-inset-right, 0px),
+		calc((100% - var(--content-max)) / 2)
+	);
+	--ds-control-background: var(--surface-1);
+	--ds-control-hover: var(--surface-2);
 }
 
 @media (max-width: 639.98px) {
@@ -64,8 +76,10 @@
 
 @layer base {
 	html {
-		color-scheme: dark;
+		color-scheme: light;
 		font-family: var(--font-sans);
+		-webkit-tap-highlight-color: transparent;
+		-webkit-text-size-adjust: 100%;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 		text-rendering: optimizeLegibility;
@@ -79,13 +93,29 @@
 		font-family: inherit;
 	}
 
-	:focus:not(:focus-visible) {
+	:where(.field-control, [data-slot]):focus-visible:not(
+			[data-focus-container],
+			[data-focus-container-target]
+		) {
 		outline: none;
+		background-color: var(--focus-surface);
+		color: var(--focus-foreground);
 	}
 
-	:focus-visible {
-		outline: 2px solid var(--ring);
-		outline-offset: 3px;
+	[data-slot="button"]:focus-visible:not([data-focus-container], [data-focus-container-target]) {
+		background-color: var(--focus-button-surface);
+		color: var(--focus-button-foreground);
+	}
+
+	:where(.field-control, [data-slot]):focus-visible:not(
+			[data-focus-container],
+			[data-focus-container-target]
+		) {
+		transition-duration: 0ms !important;
+	}
+
+	:where(.field-control, input, textarea):focus-visible::placeholder {
+		color: var(--focus-foreground) !important;
 	}
 
 	body,
@@ -103,6 +133,18 @@
 	summary,
 	select:not(:disabled) {
 		cursor: pointer;
+	}
+
+	button,
+	[type="button"],
+	[type="submit"],
+	[role="button"],
+	a[href],
+	summary {
+		touch-action: manipulation;
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		user-select: none;
 	}
 
 	@media (hover: none) and (pointer: coarse) {
@@ -124,7 +166,7 @@
 
 	*::-webkit-scrollbar-thumb {
 		background: var(--scrollbar-thumb);
-		border-radius: 8px;
+		border-radius: var(--radius-small);
 	}
 
 	*::-webkit-scrollbar-track {
@@ -132,8 +174,83 @@
 	}
 }
 
+@utility duration-hover {
+	transition-duration: var(--motion-hover);
+}
+
+@utility primary-fill-wipe {
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
+
+	&::before {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background-color: var(--primary-hover);
+		transform: translateX(-102%);
+		transition: transform var(--motion-editorial) var(--motion-ease-standard);
+		content: "";
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		&:hover::before {
+			transform: translateX(0);
+		}
+	}
+
+	&:focus-visible::before {
+		visibility: hidden;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		&::before {
+			transition-duration: 0ms;
+		}
+	}
+}
+
+@utility ease-interaction {
+	transition-timing-function: var(--motion-ease-interaction);
+}
+
+@utility surface-context {
+	background-color: var(--surface-1);
+	--ds-control-background: var(--surface-2);
+	--ds-control-hover: var(--surface-3);
+}
+
+@layer utilities {
+	.surface-context .surface-context {
+		background-color: var(--surface-2);
+		--ds-control-background: var(--surface-3);
+		--ds-control-hover: var(--surface-2);
+	}
+
+	.surface-context .surface-context .surface-context {
+		background-color: var(--surface-3);
+		--ds-control-background: var(--surface-2);
+		--ds-control-hover: var(--surface-3);
+	}
+}
+
+@utility surface-tooltip {
+	background-color: var(--foreground);
+	color: var(--background);
+	--ds-control-background: var(--surface-3);
+	--ds-control-hover: var(--surface-2);
+}
+
+@utility surface-overlay {
+	background-color: var(--surface-overlay);
+	--ds-control-background: var(--surface-2);
+	--ds-control-hover: var(--surface-3);
+}
+
 @utility surface-1 {
 	background-color: var(--surface-1);
+	--ds-control-background: var(--surface-2);
+	--ds-control-hover: var(--surface-3);
 }
 
 @utility surface-hover {
@@ -142,20 +259,34 @@
 
 @utility surface-2 {
 	background-color: var(--surface-2);
+	--ds-control-background: var(--surface-3);
+	--ds-control-hover: var(--surface-2);
 }
 
 @utility surface-3 {
-	background-color: var(--surface-2);
+	background-color: var(--surface-3);
 	box-shadow: var(--elev-float);
+	--ds-control-background: var(--surface-2);
+	--ds-control-hover: var(--surface-3);
 }
 
 @utility surface-modal {
-	background-color: var(--surface-2);
+	background-color: var(--surface-overlay);
 	box-shadow: var(--elev-modal);
+	--ds-control-background: var(--surface-2);
+	--ds-control-hover: var(--surface-3);
+}
+
+@utility surface-control {
+	background-color: var(--ds-control-background);
+}
+
+@utility surface-control-hover {
+	background-color: var(--ds-control-hover);
 }
 
 @utility surface-input {
-	background-color: var(--surface-input);
+	background-color: var(--ds-control-background);
 }
 
 @utility marketing-shell {
@@ -183,11 +314,154 @@
 
 @utility field-control {
 	min-height: var(--control-md);
+	border: 0;
 	border-radius: var(--radius-control);
 	padding: var(--spacing-field-y) var(--spacing-field-x);
-	background-color: var(--surface-input);
+	background-color: var(--ds-control-background);
 	color: var(--foreground);
-	transition:
-		border-color var(--motion-base) var(--motion-ease-standard),
-		background-color var(--motion-base) var(--motion-ease-standard);
+	transition: none;
+
+	&:is(:disabled, [aria-disabled="true"]) {
+		background-color: var(--disabled-background);
+		color: var(--disabled-foreground);
+		opacity: 1;
+	}
+}
+
+html.dark {
+	color-scheme: dark;
+}
+
+.light {
+	color-scheme: light;
+	--ds-control-background: var(--surface-1);
+	--ds-control-hover: var(--surface-2);
+}
+
+[data-focus-container] {
+	padding-inline-start: 1.5rem;
+}
+
+[data-focus-container]::before {
+	content: "";
+	position: sticky;
+	inset-block-start: 0;
+	display: block;
+	inline-size: 1rem;
+	block-size: 1rem;
+	margin-inline-start: -1.5rem;
+	margin-block-end: -1rem;
+	background-color: var(--foreground);
+	opacity: 0;
+	pointer-events: none;
+	transition: none;
+	forced-color-adjust: auto;
+}
+
+:is([data-focus-container], [data-focus-container-target]):focus-visible {
+	outline: none;
+}
+
+[data-focus-container]:is(
+		:focus-visible,
+		:has(> [data-focus-container-target]:focus-visible)
+	)::before {
+	opacity: 1;
+}
+
+@media (forced-colors: active) {
+	:root,
+	.dark {
+		--background: Canvas;
+		--foreground: CanvasText;
+		--card: Canvas;
+		--card-foreground: CanvasText;
+		--primary: Highlight;
+		--primary-foreground: HighlightText;
+		--secondary: ButtonFace;
+		--secondary-foreground: ButtonText;
+		--muted: ButtonFace;
+		--muted-foreground: GrayText;
+		--accent: Highlight;
+		--accent-foreground: HighlightText;
+		--popover: Canvas;
+		--popover-foreground: CanvasText;
+		--destructive: Mark;
+		--destructive-foreground: MarkText;
+		--border: ButtonText;
+		--input: ButtonText;
+		--ring: Highlight;
+		--signal: Highlight;
+		--ink-muted: GrayText;
+		--hair: ButtonText;
+		--hair-soft: ButtonText;
+		--surface-1: Canvas;
+		--surface-hover: Highlight;
+		--surface-2: ButtonFace;
+		--surface-3: ButtonFace;
+		--surface-overlay: Canvas;
+		--surface-input: Canvas;
+		--focus-surface: CanvasText;
+		--focus-foreground: Canvas;
+		--focus-button-surface: CanvasText;
+		--focus-button-foreground: Canvas;
+		--primary-hover: Highlight;
+		--primary-hover-foreground: HighlightText;
+		--control-border: ButtonText;
+		--disabled-background: ButtonFace;
+		--disabled-foreground: GrayText;
+		--disabled-border: GrayText;
+		--ds-control-background: Canvas;
+		--ds-control-hover: Highlight;
+	}
+
+	:where(
+		.field-control,
+		[data-slot="select-trigger"],
+		[data-slot="checkbox"],
+		[data-slot="radio-group-item"],
+		[data-slot="switch"],
+		[data-slot="button"],
+		[data-slot="input-group"],
+		[data-slot="input-otp-slot"]
+	) {
+		background-color: Highlight;
+		color: HighlightText;
+		forced-color-adjust: none;
+	}
+
+	:where(.field-control, [data-slot]):focus-visible:not(
+			[data-focus-container],
+			[data-focus-container-target]
+		),
+	[data-slot="button"]:focus-visible:not([data-focus-container], [data-focus-container-target]) {
+		background-color: CanvasText !important;
+		color: Canvas !important;
+	}
+
+	.field-control::placeholder {
+		color: HighlightText;
+		opacity: 1;
+	}
+
+	[aria-invalid="true"] {
+		background-color: Mark;
+		color: MarkText;
+	}
+
+	:disabled,
+	[aria-disabled="true"] {
+		color: GrayText;
+	}
+
+	:where([data-slot="button"], .field-control):is(:disabled, [aria-disabled="true"]) {
+		color: HighlightText;
+		opacity: 0.75;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.field-control {
+		transition-duration: 0ms;
+	}
 }

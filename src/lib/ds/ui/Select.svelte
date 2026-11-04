@@ -1,50 +1,52 @@
 <script lang="ts">
 	import { Select } from "bits-ui";
-	import { onMount, type Snippet } from "svelte";
+	import { getContext, onMount, type Snippet } from "svelte";
 	import Check from "@lucide/svelte/icons/check";
 	import ChevronsUpDown from "@lucide/svelte/icons/chevrons-up-down";
 	import type { HTMLSelectAttributes } from "svelte/elements";
 	import { cn } from "../utils";
 	import { inputBase } from "../styles/recipes";
+	import { FIELD_CONTEXT, mergeDescribedBy, type FieldContext } from "./field-context";
 
 	/**
-	 * The one canonical select, site-wide. A bits-ui (type single) combobox styled
-	 * to match `inputBase` so it sits flush beside text inputs in a form. The panel
-	 * is a portalled `bg-card` surface that locks to the trigger width
-	 * (`--bits-select-anchor-width`) — so it never overflows on mobile — and caps its
-	 * height to the available viewport space, scrolling within. The `signal` accent
-	 * marks the selected row's check only; the resting surface stays monochrome.
-	 *
-	 * Open/close motion is gated behind `motion-safe:`; reduced-motion users get an
-	 * instant snap. Form submission rides the hidden input via the `name` prop.
+	 * A progressive-enhancement select. Native HTML owns SSR, no-JS behavior, and
+	 * form submission. Bits UI is mounted after hydration and takes over the
+	 * public id, keyboard interaction, and visual presentation.
 	 */
-	type Item = { value: string; label: string; disabled?: boolean };
+	export type SelectItem = { value: string; label: string; disabled?: boolean };
 
+	const uid = $props.id();
+	const field = getContext<FieldContext | undefined>(FIELD_CONTEXT);
 	let {
 		value = $bindable(),
+		open = $bindable(false),
 		items,
 		children,
 		name,
+		form,
 		id,
 		portalTarget,
 		contentLayer,
-		required = false,
+		required,
 		autocomplete,
 		placeholder = "Select…",
-		disabled = false,
+		disabled,
 		class: className = "",
 		contentClass = "",
 		"aria-label": ariaLabel,
 		"aria-labelledby": ariaLabelledby,
 		"aria-describedby": ariaDescribedby,
 		"aria-invalid": ariaInvalid,
+		"aria-required": ariaRequired,
 		onchange,
 		onValueChange
 	}: {
 		value?: string;
-		items?: Item[];
+		open?: boolean;
+		items?: SelectItem[];
 		children?: Snippet;
 		name?: string;
+		form?: string;
 		id?: string;
 		portalTarget?: string;
 		contentLayer?: string;
@@ -58,157 +60,178 @@
 		"aria-labelledby"?: string;
 		"aria-describedby"?: string;
 		"aria-invalid"?: boolean | "true" | "false";
+		"aria-required"?: boolean | "true" | "false";
 		onchange?: HTMLSelectAttributes["onchange"];
 		onValueChange?: (value: string) => void;
 	} = $props();
 
+	const fieldProps = $derived(field?.props);
+	const publicId = $derived(id ?? fieldProps?.id ?? `select-${uid}`);
+	const controlRequired = $derived(required ?? fieldProps?.required ?? false);
+	const controlDisabled = $derived(disabled ?? fieldProps?.disabled ?? false);
+	const controlDescribedby = $derived(mergeDescribedBy(fieldProps?.["aria-describedby"], ariaDescribedby));
+	const controlInvalid = $derived(ariaInvalid ?? fieldProps?.["aria-invalid"]);
+	const controlRequiredLabel = $derived(ariaRequired ?? fieldProps?.["aria-required"]);
+	const nativeId = $derived(`${publicId}-native`);
+
 	let nativeSelect = $state<HTMLSelectElement>();
 	let enhanced = $state(false);
-	let nativeItems = $state<Item[]>([]);
+	let nativeItems = $state<SelectItem[]>([]);
 	const resolvedItems = $derived(items ?? nativeItems);
-	const selectedLabel = $derived(resolvedItems.find(it => it.value === value)?.label ?? "");
+	const selectedLabel = $derived(resolvedItems.find(item => item.value === value)?.label ?? "");
+	const triggerLabel = $derived(ariaLabel ? `${ariaLabel}: ${selectedLabel || placeholder}` : undefined);
 
-	// exactOptionalPropertyTypes forbids handing bits-ui an explicit `undefined`, so
-	// only include name/id when actually provided.
-	const triggerRest = $derived(id !== undefined ? { id } : {});
-	const nativeId = $derived(id !== undefined ? `${id}-native` : undefined);
-	const changeValue = (next: string) => {
-		value = next;
-		onValueChange?.(next);
-		nativeSelect?.dispatchEvent(new Event("change", { bubbles: true }));
-	};
-	onMount(() => {
-		if (!children) return;
+	const syncNativeItems = () => {
 		if (!nativeSelect) return;
-		const element = nativeSelect;
-		const sync = () => {
-			nativeItems = [...element.options].map(option => ({
+		nativeItems = [...nativeSelect.options]
+			.filter(option => option.value !== "")
+			.map(option => ({
 				value: option.value,
-				label: option.textContent,
+				label: option.textContent ?? "",
 				disabled: option.disabled
 			}));
-		};
-		sync();
+	};
+
+	const handleNativeChange = (event: Event & { currentTarget: HTMLSelectElement }) => {
+		value = event.currentTarget.value;
+		onchange?.(event);
+		onValueChange?.(value);
+	};
+
+	const changeValue = (next: string) => {
+		value = next;
+		if (!nativeSelect) return;
+		nativeSelect.value = next;
+		nativeSelect.dispatchEvent(new Event("change", { bubbles: true }));
+	};
+	const handleItemPointerUp = (item: SelectItem, event: PointerEvent | TouchEvent) => {
+		event.preventDefault();
+		if (!item.disabled && value !== item.value) changeValue(item.value);
+		open = false;
+	};
+	const handleContentPointerUp = (event: PointerEvent | TouchEvent) => {
+		if ("pointerType" in event && event.pointerType !== "touch") return;
+		const itemElement = (event.target as HTMLElement).closest<HTMLElement>("[data-value]");
+		const item = items?.find(candidate => candidate.value === itemElement?.dataset.value);
+		if (!item) return;
+		event.stopPropagation();
+		handleItemPointerUp(item, event);
+	};
+	let activationOpen = $state<boolean>();
+	const rememberActivation = () => {
+		activationOpen = open;
+	};
+	const reconcileActivation = () => {
+		const expectedOpen = !(activationOpen ?? open);
+		queueMicrotask(() => {
+			if (open !== expectedOpen) open = expectedOpen;
+			activationOpen = undefined;
+		});
+	};
+
+	onMount(() => {
+		syncNativeItems();
 		enhanced = true;
-		const observer = new MutationObserver(sync);
-		observer.observe(element, { childList: true, subtree: true, characterData: true, attributes: true });
+		if (!children || !nativeSelect) return;
+		const observer = new MutationObserver(syncNativeItems);
+		observer.observe(nativeSelect, { childList: true, subtree: true, characterData: true, attributes: true });
 		return () => observer.disconnect();
 	});
 </script>
 
-{#if items || enhanced}
+{#if enhanced}
 	<Select.Root
 		type="single"
 		bind:value={value as never}
-		{disabled}
+		bind:open
+		disabled={controlDisabled}
 		items={resolvedItems}
 		onValueChange={changeValue as never}
 	>
 		<Select.Trigger
-			{...triggerRest}
-			aria-label={ariaLabel}
+			id={publicId}
+			onpointerdown={rememberActivation}
+			onclick={reconcileActivation}
+			aria-label={triggerLabel}
 			aria-labelledby={ariaLabelledby}
-			aria-describedby={ariaDescribedby}
-			aria-invalid={ariaInvalid}
+			aria-describedby={controlDescribedby}
+			aria-invalid={controlInvalid}
 			class={cn(
 				inputBase,
-				"data-[placeholder]:text-ink-muted flex items-center justify-center gap-2 text-center disabled:cursor-not-allowed disabled:opacity-50",
+				"data-[placeholder]:text-muted-foreground disabled:text-disabled-foreground disabled:bg-disabled-background flex items-center justify-between gap-2 text-start disabled:cursor-not-allowed disabled:opacity-100 forced-colors:bg-[Canvas] forced-colors:text-[CanvasText]",
 				className
 			)}
 		>
 			<span class="min-w-0 truncate">{selectedLabel || placeholder}</span>
-			<ChevronsUpDown size={14} class="text-ink-muted shrink-0" aria-hidden="true" />
+			<ChevronsUpDown size={16} class="text-muted-foreground shrink-0" aria-hidden="true" />
 		</Select.Trigger>
 		<Select.Portal {...portalTarget !== undefined ? { to: portalTarget } : {}}>
 			<Select.Content
 				sideOffset={6}
 				{...contentLayer !== undefined ? { "data-overlay-layer": contentLayer } : {}}
 				class={cn(
-					"border-hair bg-card z-50 max-h-[min(18rem,var(--bits-select-content-available-height))] w-[var(--bits-select-anchor-width)] min-w-[var(--bits-select-anchor-width)] overflow-hidden rounded-[11px] border shadow-xl outline-none",
-					"motion-safe:data-[state=open]:animate-[ds-fade-in_150ms_var(--ease)]",
+					"surface-overlay rounded-control z-50 max-h-[min(18rem,var(--bits-select-content-available-height))] w-[var(--bits-select-anchor-width)] min-w-[var(--bits-select-anchor-width)] overflow-hidden",
+					"motion-safe:data-[state=open]:animate-[ds-fade-in_150ms_var(--ease)] motion-reduce:animate-none",
 					contentClass
 				)}
 			>
-				<Select.Viewport class="overflow-y-auto overscroll-contain p-1">
-					{#each resolvedItems as item (item.value)}
-						<Select.Item
-							value={item.value}
-							label={item.label}
-							disabled={item.disabled ?? false}
-							class="text-ink-muted data-highlighted:bg-ink-2 data-highlighted:text-foreground data-[state=checked]:text-foreground rounded-choice duration-fast ease-standard flex cursor-pointer items-center justify-between gap-2 px-2.5 py-2.5 text-xs transition-colors select-none data-disabled:pointer-events-none data-disabled:opacity-40 pointer-coarse:py-3"
-						>
-							{#snippet children({ selected })}
-								<span class="min-w-0 truncate">{item.label}</span>
-								{#if selected}
-									<Check size={14} class="text-signal shrink-0" aria-hidden="true" />
-								{/if}
-							{/snippet}
-						</Select.Item>
-					{/each}
-				</Select.Viewport>
+				<div
+					role="presentation"
+					onpointerupcapture={handleContentPointerUp}
+					ontouchend={handleContentPointerUp}
+				>
+					<Select.Viewport
+						class="max-h-[min(18rem,var(--bits-select-content-available-height))] overflow-y-auto overscroll-contain p-1"
+					>
+						{#each resolvedItems as item (item.value)}
+							<Select.Item
+								value={item.value}
+								label={item.label}
+								disabled={item.disabled ?? false}
+								onpointerup={(event: PointerEvent) => handleItemPointerUp(item, event)}
+								ontouchend={(event: TouchEvent) => handleItemPointerUp(item, event)}
+								class="text-muted-foreground data-highlighted:surface-control-hover data-highlighted:text-foreground data-[state=checked]:text-foreground rounded-choice duration-fast ease-standard text-label data-disabled:text-disabled-foreground flex min-h-11 cursor-pointer items-center justify-between gap-2 px-2.5 py-2.5 transition-colors select-none data-disabled:pointer-events-none data-disabled:opacity-100 pointer-coarse:py-3"
+							>
+								{#snippet children({ selected })}
+									<span class="min-w-0 wrap-anywhere whitespace-normal">{item.label}</span>
+									{#if selected}
+										<Check size={16} class="text-signal shrink-0" aria-hidden="true" />
+									{/if}
+								{/snippet}
+							</Select.Item>
+						{/each}
+					</Select.Viewport>
+				</div>
 			</Select.Content>
 		</Select.Portal>
 	</Select.Root>
 {/if}
-{#if children}
-	<select
-		bind:this={nativeSelect}
-		{name}
-		id={nativeId}
-		{required}
-		{disabled}
-		{autocomplete}
-		aria-hidden={enhanced ? "true" : undefined}
-		aria-label={ariaLabel}
-		aria-labelledby={ariaLabelledby}
-		aria-describedby={ariaDescribedby}
-		aria-invalid={ariaInvalid}
-		{onchange}
-		bind:value
-		class={cn(inputBase, enhanced && "hidden", className)}
-	>
+
+<select
+	bind:this={nativeSelect}
+	{name}
+	{form}
+	id={enhanced ? nativeId : publicId}
+	required={controlRequired}
+	disabled={controlDisabled}
+	{autocomplete}
+	aria-hidden={enhanced ? "true" : undefined}
+	aria-label={ariaLabel}
+	aria-labelledby={ariaLabelledby}
+	aria-describedby={controlDescribedby}
+	aria-invalid={controlInvalid}
+	aria-required={controlRequiredLabel}
+	tabindex={enhanced ? -1 : undefined}
+	onchange={handleNativeChange}
+	bind:value
+	class={cn(inputBase, enhanced && "sr-only !m-[-1px] !size-px !min-h-0 !w-px !max-w-none !p-0", className)}
+>
+	{#if children}
 		{@render children()}
-	</select>
-{:else if name}
-	<select
-		{name}
-		id={nativeId}
-		{required}
-		{disabled}
-		{autocomplete}
-		aria-label={ariaLabel}
-		aria-labelledby={ariaLabelledby}
-		aria-describedby={ariaDescribedby}
-		aria-invalid={ariaInvalid}
-		bind:value
-		class="sr-only"
-		tabindex={-1}
-		aria-hidden="true"
-	>
-		{#if placeholder}<option value="" disabled={required}>{placeholder}</option>{/if}
-		{#each resolvedItems as item (item.value)}<option value={item.value} disabled={item.disabled}
-				>{item.label}</option
-			>{/each}
-	</select>
-{/if}
-{#if !children}<noscript>
-		<select
-			{name}
-			{id}
-			{required}
-			{disabled}
-			{autocomplete}
-			aria-label={ariaLabel}
-			aria-labelledby={ariaLabelledby}
-			aria-describedby={ariaDescribedby}
-			aria-invalid={ariaInvalid}
-			class={cn(inputBase, className)}
-		>
-			{#if placeholder}<option value="" disabled={required} selected={!value}>{placeholder}</option>{/if}
-			{#each resolvedItems as item (item.value)}<option
-					value={item.value}
-					disabled={item.disabled}
-					selected={item.value === value}>{item.label}</option
-				>{/each}
-		</select>
-	</noscript>{/if}
+	{:else}
+		<option value="" disabled={controlRequired}>{placeholder}</option>
+		{#each resolvedItems as item (item.value)}
+			<option value={item.value} disabled={item.disabled}>{item.label}</option>
+		{/each}
+	{/if}
+</select>

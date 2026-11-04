@@ -4,10 +4,10 @@
 	import { labelBase, helperBase } from "../styles/recipes";
 
 	/**
-	 * One settings field row. Stacks on mobile; on md+ becomes a two-column
-	 * label|control grid with a fixed label column so controls align down the
-	 * page, and the control FILLS its cell (no fixed widths — that was the
-	 * "tiny control far right" bug). Use `stacked` for genuinely full-width
+	 * One settings field row. Label and control share a row while both have
+	 * a readable 15rem allocation; otherwise they wrap against their container.
+	 * The label keeps its alignment and the control fills the remaining space.
+	 * Use `stacked` for genuinely full-width
 	 * inputs (API tokens, IDs): single column at every width, control below label.
 	 * Controls passed as children should be `w-full`.
 	 */
@@ -28,20 +28,14 @@
 	} = $props();
 </script>
 
-<div
-	class={cn(
-		"grid gap-x-8 gap-y-2.5",
-		stacked ? "grid-cols-1" : "md:grid-cols-[15rem_minmax(0,1fr)] md:items-center",
-		className
-	)}
->
-	<div class="flex min-w-0 flex-col gap-1">
+<div class={cn("flex gap-x-8 gap-y-2.5", stacked ? "flex-col" : "flex-wrap items-center", className)}>
+	<div class={cn("flex min-w-0 flex-col gap-1 wrap-anywhere", !stacked && "basis-60")}>
 		<label for={htmlFor} class={cn(labelBase, "mb-0")}>{label}</label>
 		{#if hint}
-			<span class={helperBase}>{hint}</span>
+			<span class={cn(helperBase, "text-muted-foreground")}>{hint}</span>
 		{/if}
 	</div>
-	<div class="w-full min-w-0">
+	<div class={cn("w-full min-w-0", !stacked && "flex-1 basis-60")}>
 		{@render children()}
 	</div>
 </div>
