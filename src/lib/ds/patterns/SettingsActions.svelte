@@ -4,11 +4,10 @@
 
 	/**
 	 * The one in-section Settings save-footer language. Pure layout — it owns the
-	 * rule: the save button sits BESIDE the status/content on desktop and goes
-	 * FULL-WIDTH underneath on mobile. Replaces the old sticky `SettingsSaveBar`
-	 * pattern — the save now lives INSIDE its own section (bottom-row), not floating
-	 * beneath the page. `children` is the button(s) (typically a `Cta`); the cell
-	 * forces them full-width + centered on mobile with NO consumer width classes.
+	 * rule: status and actions remain beside each other while their content fits,
+	 * then wrap within the section. Buttons grow to fill a narrow action row.
+	 * Unlike the sticky `SettingsSaveBar`, this footer lives inside its section.
+	 * `children` is the button(s), typically a `Cta`.
 	 * Pass `status` for the optional left-side hint (Saving… / Saved / unsaved note).
 	 */
 	let {
@@ -22,19 +21,15 @@
 	} = $props();
 </script>
 
-<div
-	class={cn(
-		"border-hair flex flex-col gap-3 border-t pt-5 sm:flex-row sm:items-center",
-		status ? "sm:justify-between" : "sm:justify-end",
-		className
-	)}
->
+<div class={cn("flex flex-wrap items-center gap-3 pt-5", status ? "justify-between" : "justify-end", className)}>
 	{#if status}
-		<div class="text-ink-muted text-caption flex min-w-0 items-center gap-2 text-pretty">
+		<div
+			class="text-muted-foreground text-caption flex min-w-0 flex-1 basis-48 flex-wrap items-center gap-2 text-pretty wrap-anywhere"
+		>
 			{@render status()}
 		</div>
 	{/if}
-	<div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row [&>*]:w-full [&>*]:justify-center sm:[&>*]:w-auto">
+	<div class="ms-auto flex max-w-full min-w-0 flex-wrap gap-2 [&>*]:flex-1 [&>*]:justify-center">
 		{@render children()}
 	</div>
 </div>

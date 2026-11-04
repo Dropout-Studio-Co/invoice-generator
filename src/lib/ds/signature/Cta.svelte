@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ArrowUpRight from "@lucide/svelte/icons/arrow-up-right";
+	import ArrowUpRight from "../icons/moving/ArrowUpRight.svelte";
 	import type { Snippet } from "svelte";
 	import type { HTMLAnchorAttributes, HTMLButtonAttributes } from "svelte/elements";
 	import { cn } from "../utils";
@@ -41,10 +41,12 @@
 	variant={foundationVariant}
 	size={foundationSize}
 	class={cn(
-		"group duration-editorial ease-standard relative overflow-hidden rounded-full text-center whitespace-nowrap uppercase transition-[background,color,border-color,box-shadow]",
-		variant === "primary" && "bg-signal text-background hover:bg-signal/90",
+		"group motion-safe:duration-editorial motion-safe:ease-standard relative overflow-hidden rounded-full text-center uppercase motion-safe:transition-[background-color,color,opacity]",
+		variant === "primary" &&
+			"bg-signal text-background hover:text-primary-hover-foreground motion-safe:duration-editorial motion-safe:ease-interaction",
 		variant === "secondary" && "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-		variant === "compact" && "bg-signal text-background hover:bg-signal/90 shadow-lg",
+		variant === "compact" &&
+			"bg-signal text-background hover:text-primary-hover-foreground motion-safe:duration-editorial motion-safe:ease-interaction",
 		className
 	)}
 	{...rest}
@@ -53,16 +55,13 @@
 		<span
 			data-cta-dot
 			aria-hidden="true"
-			class="bg-background relative z-[2] size-[7px] shrink-0 animate-[ctaPulse_var(--motion-cta-pulse)_var(--ease)_infinite] rounded-full"
+			class="bg-background relative z-[2] size-2 shrink-0 rounded-full motion-safe:animate-[ctaPulse_var(--motion-cta-pulse)_var(--ease)_infinite]"
 		></span>
 	{/if}
 	<span class="relative z-[2]">{@render children()}</span>
 	{#if arrow}
-		<span
-			aria-hidden="true"
-			class="duration-editorial ease-standard relative z-[2] inline-flex items-center transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
-		>
-			<ArrowUpRight data-icon="inline-end" strokeWidth={2.25} aria-hidden="true" />
+		<span aria-hidden="true" class="relative z-[2] inline-flex items-center">
+			<ArrowUpRight data-icon="inline-end" strokeWidth={2.25} />
 		</span>
 	{/if}
 </Button>

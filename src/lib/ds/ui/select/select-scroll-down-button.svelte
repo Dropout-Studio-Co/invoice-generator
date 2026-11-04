@@ -14,7 +14,7 @@
 	bind:ref
 	data-slot="select-scroll-down-button"
 	class={cn(
-		"bg-popover z-10 flex cursor-default items-center justify-center py-1 [&_svg:not([class*='size-'])]:size-4",
+		"surface-3 text-foreground z-10 flex min-h-11 cursor-default items-center justify-center py-2 forced-colors:bg-[Canvas] forced-colors:text-[CanvasText] [&_svg:not([class*='size-'])]:size-4",
 		className
 	)}
 	{...restProps}

@@ -16,7 +16,10 @@
 	bind:this={ref}
 	data-slot="input-otp-separator"
 	role="separator"
-	class={cn("flex items-center [&_svg:not([class*='size-'])]:size-4", className)}
+	class={cn(
+		"flex min-h-10 items-center motion-reduce:transition-none [&_svg:not([class*='size-'])]:size-4",
+		className
+	)}
 	{...restProps}
 >
 	{#if children}

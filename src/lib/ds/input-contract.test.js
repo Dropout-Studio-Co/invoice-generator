@@ -4,16 +4,29 @@ import test from "node:test";
 
 const source = await readFile(new URL("./styles/recipes.ts", import.meta.url), "utf8");
 
-test("inputBase owns one stable two-pixel field-edge focus indicator", () => {
+test("inputBase owns contextual fill, non-stroke keyboard focus and invalid state", () => {
 	for (const value of [
-		"border-2",
-		"border-transparent",
-		"focus:border-ring",
-		"focus:outline-none",
-		"focus:surface-hover",
-		"aria-invalid:border-destructive",
-		"disabled:opacity-50"
+		"field-control",
+		"focus-visible:bg-focus-surface",
+		"focus-visible:text-focus-foreground",
+		"aria-invalid:bg-destructive/20",
+		"disabled:cursor-not-allowed"
 	])
-		assert.match(source, new RegExp(value));
-	assert.doesNotMatch(source, /\bw-full border border-transparent\b/);
+		assert.ok(source.includes(value), `${value} present in inputBase`);
+	assert.doesNotMatch(source, /focus:border|focus-visible:outline|aria-invalid:border/);
+});
+
+test("compact field typography is limited to large fine-pointer layouts", async () => {
+	for (const path of [
+		"styles/recipes.ts",
+		"ui/input/input.svelte",
+		"ui/textarea/textarea.svelte",
+		"ui/Combobox.svelte",
+		"ui/MultiSelect.svelte"
+	]) {
+		const control = await readFile(new URL(`./${path}`, import.meta.url), "utf8");
+		assert.match(control, /\btext-base\b/, path);
+		assert.match(control, /lg:pointer-fine:text-label/, path);
+		assert.doesNotMatch(control, /(?<!pointer-fine:)\b(?:sm|md|lg):text-label/, path);
+	}
 });

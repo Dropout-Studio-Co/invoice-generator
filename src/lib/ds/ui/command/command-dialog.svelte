@@ -33,7 +33,10 @@
 		<Dialog.Description>{description}</Dialog.Description>
 	</Dialog.Header>
 	<Dialog.Content
-		class={cn("top-1/3 translate-y-0 overflow-hidden rounded-xl! p-0", className)}
+		class={cn(
+			"top-[min(33dvh,8rem)] max-h-[calc(100dvh-min(33dvh,8rem)-1rem)] translate-y-0 overflow-y-auto rounded-lg p-0",
+			className
+		)}
 		{showCloseButton}
 		{...portalProps ? { portalProps } : {}}
 	>

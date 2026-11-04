@@ -21,14 +21,16 @@
 
 <div
 	class={cn(
-		"border-hair bg-card/85 sticky bottom-4 z-30 flex items-center justify-between gap-3 rounded-2xl border p-3 backdrop-blur-md",
+		"surface-context sticky bottom-4 z-30 flex flex-wrap items-center justify-between gap-3 rounded-lg p-3 shadow-[var(--elev-float)] backdrop-blur-md",
 		className
 	)}
 >
-	<div class="text-ink-muted text-caption flex min-w-0 items-center gap-2">
+	<div
+		class="text-muted-foreground text-caption flex min-w-0 flex-1 basis-48 flex-wrap items-center gap-2 wrap-anywhere"
+	>
 		{#if status}{@render status()}{/if}
 	</div>
-	<div class="flex shrink-0 items-center gap-2">
+	<div class="ms-auto flex max-w-full min-w-0 flex-wrap items-center gap-2">
 		{@render action()}
 	</div>
 </div>

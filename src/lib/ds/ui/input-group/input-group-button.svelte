@@ -1,14 +1,15 @@
 <script lang="ts" module>
-	import { tv, type VariantProps } from "tailwind-variants";
+	import { type VariantProps } from "tailwind-variants";
+	import { tv } from "../../tv";
 
 	const inputGroupButtonVariants = tv({
-		base: "gap-2 text-sm flex items-center shadow-none",
+		base: "min-h-9 gap-2 text-label flex items-center shadow-none motion-safe:transition-colors motion-safe:duration-fast motion-safe:ease-standard motion-reduce:transition-none pointer-coarse:min-h-11",
 		variants: {
 			size: {
-				xs: "h-6 gap-1 rounded-[calc(var(--radius)_-_3px)] px-1.5 [&>svg:not([class*='size-'])]:size-3.5",
+				xs: "h-9 gap-1 rounded-choice px-2 pointer-coarse:min-h-11 [&>svg:not([class*='size-'])]:size-4",
 				sm: "",
-				"icon-xs": "size-6 rounded-[calc(var(--radius)_-_3px)] p-0 has-[>svg]:p-0",
-				"icon-sm": "size-8 p-0 has-[>svg]:p-0"
+				"icon-xs": "size-9 rounded-choice p-0 pointer-coarse:min-h-11 pointer-coarse:min-w-11 has-[>svg]:p-0",
+				"icon-sm": "size-9 rounded-choice p-0 pointer-coarse:min-h-11 pointer-coarse:min-w-11 has-[>svg]:p-0"
 			}
 		},
 		defaultVariants: {
