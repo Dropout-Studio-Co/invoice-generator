@@ -33,6 +33,8 @@
 		variant?: TabsListVariant;
 	} = $props();
 
+	const listClass = $derived(cn(tabsListVariants({ variant: variant ?? "default" }), className));
+
 	let indicatorEl: HTMLSpanElement | null = null;
 	let activeTrigger: HTMLElement | null = null;
 	let activeOrientation = "";
@@ -225,11 +227,6 @@
 	});
 </script>
 
-<TabsPrimitive.List
-	bind:ref
-	data-slot="tabs-list"
-	data-variant={variant}
-	class={cn(tabsListVariants({ variant }), className)}
-	{...restProps}
-	{children}
-/>
+<TabsPrimitive.List bind:ref data-slot="tabs-list" data-variant={variant} class={listClass} {...restProps}>
+	{@render children?.()}
+</TabsPrimitive.List>

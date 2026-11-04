@@ -38,8 +38,9 @@ test("container focus has a reserved solid sticky marker, not a descendant focus
 		)
 	];
 	assert.ok(paintRules.length >= 3);
-	for (const [, selector] of paintRules) {
-		if (!selector.includes(":focus-visible")) continue;
+	for (const match of paintRules) {
+		const selector = match[1];
+		if (!selector || !selector.includes(":focus-visible")) continue;
 		assert.ok(
 			selector
 				.replace(/\s+/g, "")

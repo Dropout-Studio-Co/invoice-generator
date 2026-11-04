@@ -3,12 +3,12 @@
 	"kind": "dropout-ds-parity",
 	"mode": "full",
 	"sourceRepository": "https://github.com/beyourahi/dropout-design-system.git",
-	"dsVersion": "3.4.5",
-	"canonicalCommit": "ff2de9b2a5ffaac261066f58140c7b8590319299",
+	"dsVersion": "3.4.6",
+	"canonicalCommit": "b42cfb589423052e3273539e4992b91e4c97364c",
 	"sourceSubtree": "src/lib",
 	"destination": "src/lib/ds",
 	"fileCount": 261,
-	"treeSha256": "0bc9f49e541fbb1dfd96a4ad21e177e9a264ea1d8c651526fa6adfc0d797f509",
+	"treeSha256": "f2f93785ba517c870269fd2db0238b2b5f83b4d22e133b6d3533fdffb95cd274",
 	"files": [
 		{
 			"path": "adapters/biometric.ts",
@@ -207,8 +207,8 @@
 		},
 		{
 			"path": "tabs-focus-contract.test.js",
-			"bytes": 2004,
-			"sha256": "8bc7bab5707eb541c131440d8e075823866a53bf5a21a4e526fdf45787173dc7"
+			"bytes": 2039,
+			"sha256": "a35abf8188241a394ddc146ee4cf49650413beb5b229a795aa2605b42756c9f8"
 		},
 		{
 			"path": "tokens/generated.ts",
@@ -812,8 +812,8 @@
 		},
 		{
 			"path": "ui/field-context.ts",
-			"bytes": 517,
-			"sha256": "40def7da355bdd07e7279cf8f092f4fbb0df57791c53ec04e6fe4a2b19e9ca66"
+			"bytes": 579,
+			"sha256": "ce3bddc644395db96781e308722ca7eba2c16832b668eff5f85a5e60b94854b6"
 		},
 		{
 			"path": "ui/Field.svelte",
@@ -1257,8 +1257,8 @@
 		},
 		{
 			"path": "ui/tabs/tabs-list.svelte",
-			"bytes": 8636,
-			"sha256": "febee12bc98cef5435f59905c4f1a7fccd78bb7b3d51f315fdadb299a4708ea4"
+			"bytes": 8726,
+			"sha256": "cbcb038ea7279461099d04e9a1f80cdf421b2860c1dd053bd3e418f06c03b144"
 		},
 		{
 			"path": "ui/tabs/tabs-trigger.svelte",
