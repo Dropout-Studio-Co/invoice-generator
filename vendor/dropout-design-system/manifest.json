@@ -4,7 +4,7 @@
 	"mode": "full",
 	"sourceRepository": "https://github.com/beyourahi/dropout-design-system.git",
 	"dsVersion": "3.4.6",
-	"canonicalCommit": "b42cfb589423052e3273539e4992b91e4c97364c",
+	"canonicalCommit": "a5e1865d954c9614c46e4a4e917a7a038d8b5cef",
 	"sourceSubtree": "src/lib",
 	"destination": "src/lib/ds",
 	"fileCount": 261,
