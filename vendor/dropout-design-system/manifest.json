@@ -3,12 +3,12 @@
 	"kind": "dropout-ds-parity",
 	"mode": "full",
 	"sourceRepository": "https://github.com/beyourahi/dropout-design-system.git",
-	"dsVersion": "3.4.6",
-	"canonicalCommit": "550ebb043ce20ee5fd0a14285902d0cfd0361350",
+	"dsVersion": "3.6.1",
+	"canonicalCommit": "34f17f16560ac2b6e388684ea82a4baaf0d5b27e",
 	"sourceSubtree": "src/lib",
 	"destination": "src/lib/ds",
 	"fileCount": 261,
-	"treeSha256": "f2f93785ba517c870269fd2db0238b2b5f83b4d22e133b6d3533fdffb95cd274",
+	"treeSha256": "06d60a230cf62e2da624467e7a57021f9f56e2ee94a95815d7e3e956d67f8200",
 	"files": [
 		{
 			"path": "adapters/biometric.ts",
@@ -32,8 +32,8 @@
 		},
 		{
 			"path": "button-contract.test.js",
-			"bytes": 3088,
-			"sha256": "fd69e17c9b81a15d56cd47ce427a78be8bd8b046ce7af1f4994bb048c0d28b12"
+			"bytes": 4731,
+			"sha256": "b0af6463392a56c6865d92c43e4a9d4c9ce8f49bd41b1dc52f7b387f5bb5194a"
 		},
 		{
 			"path": "icons/brand/Facebook.svelte",
@@ -107,13 +107,13 @@
 		},
 		{
 			"path": "index.ts",
-			"bytes": 1610,
-			"sha256": "c8ab5ea424fbe0418d8805e80a1ca8f34669efdc2cd1dfba5bf69b252543f970"
+			"bytes": 1623,
+			"sha256": "0325162c051163118efcc6898b45404ddb4089a4a8b0a47646e6e2d3ac29ca3d"
 		},
 		{
 			"path": "input-contract.test.js",
-			"bytes": 1183,
-			"sha256": "73e017a7964e280ba93227feedfa7f473b2194cf3736aabee723adc37f4a4e54"
+			"bytes": 10380,
+			"sha256": "c9f173659d4bdfa5ae5649f2a45b4469bf6894c50efdfbc5f451bfb46821af0c"
 		},
 		{
 			"path": "motion.ts",
@@ -197,18 +197,18 @@
 		},
 		{
 			"path": "styles/recipes.ts",
-			"bytes": 2626,
-			"sha256": "d7ab83445fcec80ddebadb87369da598ff73a7b0c1ab331b604fbc7009f326bc"
+			"bytes": 3003,
+			"sha256": "ef6cf13fe2290b32595bd770f4298a811047b823852ae7d69516f873524f3f3a"
 		},
 		{
 			"path": "styles/tokens.css",
-			"bytes": 9898,
-			"sha256": "6749434c0a2750c25ede06538ef00b50bc3d5c38a4c2fb284164d1de89882bc1"
+			"bytes": 17191,
+			"sha256": "9da73fab46a71baf5e42988f4482513d2daf2f9ec19739561351167ed04dd870"
 		},
 		{
 			"path": "tabs-focus-contract.test.js",
-			"bytes": 2039,
-			"sha256": "a35abf8188241a394ddc146ee4cf49650413beb5b229a795aa2605b42756c9f8"
+			"bytes": 2038,
+			"sha256": "1c5bc9083dd01751609012ccbf28f9d152bfa070c8f9a1c7ef9a2585b12c1bb1"
 		},
 		{
 			"path": "tokens/generated.ts",
@@ -377,8 +377,8 @@
 		},
 		{
 			"path": "ui/button/button.svelte",
-			"bytes": 4818,
-			"sha256": "f2b148d8ed59b4a1a6bfc0effb747b057747b4e6237bee18bd990ec2536f7168"
+			"bytes": 5072,
+			"sha256": "26309318de724f8f93c334f7fe67d08772cc50fd505d78b92cf1c008f15860dc"
 		},
 		{
 			"path": "ui/button/index.ts",
@@ -442,8 +442,8 @@
 		},
 		{
 			"path": "ui/Combobox.svelte",
-			"bytes": 5966,
-			"sha256": "81942de9bff378a64c89762901008415afb570ea96b7e5bf6ee3453d99c27c84"
+			"bytes": 5823,
+			"sha256": "d40dda55935a8cd0e7c791b5bc2c144d15193ae4e8c422867b30f9f86899cd6b"
 		},
 		{
 			"path": "ui/command/command-dialog.svelte",
@@ -462,8 +462,8 @@
 		},
 		{
 			"path": "ui/command/command-input.svelte",
-			"bytes": 1089,
-			"sha256": "428208f423f9a72dfa4af7ba518b01036c4d944e2eaf1ed3f129265b1d7ebbe2"
+			"bytes": 978,
+			"sha256": "e8524d122e17562a1f31845b94cbf5a1f360c192cd178948f7694a72a0aeb23d"
 		},
 		{
 			"path": "ui/command/command-item.svelte",
@@ -817,8 +817,8 @@
 		},
 		{
 			"path": "ui/Field.svelte",
-			"bytes": 2295,
-			"sha256": "1048fe7338362a9c74f842f0af63664a76b5ab69da51a283dac6ad0e02f2c97e"
+			"bytes": 2381,
+			"sha256": "9a2c257476121106ed51a9fa509295e32e7cda682167c5989d2722449e405ae5"
 		},
 		{
 			"path": "ui/index.ts",
@@ -842,8 +842,8 @@
 		},
 		{
 			"path": "ui/input-group/input-group-input.svelte",
-			"bytes": 584,
-			"sha256": "dae1671ef8624b83f031505b1f3ca64212162cf74d42c394c590438feaff2456"
+			"bytes": 450,
+			"sha256": "bbbf4af86ff91bca868af89301828e4e5c00e937fa5d880410666eb20a8d527d"
 		},
 		{
 			"path": "ui/input-group/input-group-text.svelte",
@@ -852,13 +852,13 @@
 		},
 		{
 			"path": "ui/input-group/input-group-textarea.svelte",
-			"bytes": 613,
-			"sha256": "66a6ce588fb7eb7af8c09e2868d2035f11d490ae16a230abc365ef7dfa45289d"
+			"bytes": 479,
+			"sha256": "5338fc44c689be42ae6d22630a51566554792751bcbcc067a7bf8765a56c71a2"
 		},
 		{
 			"path": "ui/input-group/input-group.svelte",
-			"bytes": 1323,
-			"sha256": "028d72bcb568dd2f2a18c1d4a482cf02aa12f00f732875ed3d7639f306887341"
+			"bytes": 1102,
+			"sha256": "17724c59e6019d429dcc0abf7732236c70015b1d126d722d0a3c5faf44e8f938"
 		},
 		{
 			"path": "ui/input-otp/index.ts",
@@ -877,8 +877,8 @@
 		},
 		{
 			"path": "ui/input-otp/input-otp-slot.svelte",
-			"bytes": 999,
-			"sha256": "7756c082a08ddbff17bb88ad28eea7594ad576fdbd0a6a16b9d70f6e70a29cba"
+			"bytes": 883,
+			"sha256": "7457a6ece99164f634321e8aea68feacc21b8a40f65a077243978ef0599c48ee"
 		},
 		{
 			"path": "ui/input-otp/input-otp.svelte",
@@ -892,18 +892,18 @@
 		},
 		{
 			"path": "ui/input/input.svelte",
-			"bytes": 2651,
-			"sha256": "862f6f805022497e7ce9ef033ec42c9c60f31017bae69c518b191c63d7153d72"
+			"bytes": 2699,
+			"sha256": "99612f8a9009628aab622a6c46059640f0a78eb3051d42e18fc86f75f9aeca31"
 		},
 		{
 			"path": "ui/MultiSelect.svelte",
-			"bytes": 8658,
-			"sha256": "1cf6f7b73a1b405fad5b47ae2b9c71e92bab6ea7bc4c2282b60cf9a7f96b3d15"
+			"bytes": 8515,
+			"sha256": "eb2ecad7e2d6b05350803df8e364af99373a2b08f36dbeec24e3156b1b71ca5e"
 		},
 		{
 			"path": "ui/NativeSelect.svelte",
-			"bytes": 2102,
-			"sha256": "e546371f4f09d9b81da7b3287660c727482b01aa43c23f42efe45b0957b80d09"
+			"bytes": 2104,
+			"sha256": "ea597ef34e5e45270c64d3c8b90b0a49c44b4d9317c777781dadec11644ecdfd"
 		},
 		{
 			"path": "ui/pagination/index.ts",
@@ -1032,8 +1032,8 @@
 		},
 		{
 			"path": "ui/Select.svelte",
-			"bytes": 8541,
-			"sha256": "6ba38d3a1dfa68ec01d4f14cd6dd8c531dce38915c5cb4c128ba231888a6b782"
+			"bytes": 8544,
+			"sha256": "06268332a1aba34de98106f5162399c3a833dfd129bb46081155106a28acc0a4"
 		},
 		{
 			"path": "ui/select/index.ts",
@@ -1277,8 +1277,8 @@
 		},
 		{
 			"path": "ui/textarea/textarea.svelte",
-			"bytes": 1966,
-			"sha256": "956974f44b56a3abc5b7c5526a61a4d59d016cbc32e1faa85dbcf286c0e08497"
+			"bytes": 1823,
+			"sha256": "368995e84096ebee409b62a7b8fde18b2c4c6a0753284fc46b0022e0ef0b44ca"
 		},
 		{
 			"path": "ui/tooltip/index.ts",

@@ -7,8 +7,12 @@
  * state feedback uses fills, foreground, and opacity rather than strokes.
  */
 
-/** Text input / textarea / select. 16px on coarse inputs (no iOS zoom); contextual fill. */
+/** Text input / textarea. 16px on coarse inputs (no iOS zoom); contextual fill and the field-entry focus contract. */
 export const inputBase =
+	"field-control field-entry w-full text-base leading-6 placeholder:text-muted-foreground disabled:cursor-not-allowed aria-invalid:bg-destructive/20 aria-invalid:placeholder:text-foreground lg:pointer-fine:text-label lg:pointer-fine:leading-5";
+
+/** Select triggers and native selects. Fill focus, not the text-entry ring. */
+export const selectBase =
 	"field-control w-full text-base leading-6 placeholder:text-muted-foreground focus-visible:bg-focus-surface focus-visible:text-focus-foreground disabled:cursor-not-allowed aria-invalid:bg-destructive/20 aria-invalid:placeholder:text-foreground lg:pointer-fine:text-label lg:pointer-fine:leading-5";
 
 /** Field label — uppercase, micro. */

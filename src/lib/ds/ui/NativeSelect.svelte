@@ -3,7 +3,7 @@
 	import { ChevronDown } from "@lucide/svelte";
 	import type { HTMLSelectAttributes } from "svelte/elements";
 	import { cn } from "../utils";
-	import { inputBase } from "../styles/recipes";
+	import { selectBase } from "../styles/recipes";
 	import { FIELD_CONTEXT, mergeDescribedBy, type FieldContext } from "./field-context";
 
 	const field = getContext<FieldContext | undefined>(FIELD_CONTEXT);
@@ -50,7 +50,7 @@
 		aria-invalid={controlInvalid}
 		aria-required={controlRequiredLabel}
 		class={cn(
-			inputBase,
+			selectBase,
 			"appearance-none pe-10 forced-colors:appearance-auto forced-colors:bg-[Canvas] forced-colors:text-[CanvasText]",
 			className
 		)}

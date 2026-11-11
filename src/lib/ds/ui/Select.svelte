@@ -5,7 +5,7 @@
 	import ChevronsUpDown from "@lucide/svelte/icons/chevrons-up-down";
 	import type { HTMLSelectAttributes } from "svelte/elements";
 	import { cn } from "../utils";
-	import { inputBase } from "../styles/recipes";
+	import { selectBase } from "../styles/recipes";
 	import { FIELD_CONTEXT, mergeDescribedBy, type FieldContext } from "./field-context";
 
 	/**
@@ -157,7 +157,7 @@
 			aria-describedby={controlDescribedby}
 			aria-invalid={controlInvalid}
 			class={cn(
-				inputBase,
+				selectBase,
 				"data-[placeholder]:text-muted-foreground disabled:text-disabled-foreground disabled:bg-disabled-background flex items-center justify-between gap-2 text-start disabled:cursor-not-allowed disabled:opacity-100 forced-colors:bg-[Canvas] forced-colors:text-[CanvasText]",
 				className
 			)}
@@ -224,7 +224,7 @@
 	tabindex={enhanced ? -1 : undefined}
 	onchange={handleNativeChange}
 	bind:value
-	class={cn(inputBase, enhanced && "sr-only !m-[-1px] !size-px !min-h-0 !w-px !max-w-none !p-0", className)}
+	class={cn(selectBase, enhanced && "sr-only !m-[-1px] !size-px !min-h-0 !w-px !max-w-none !p-0", className)}
 >
 	{#if children}
 		{@render children()}

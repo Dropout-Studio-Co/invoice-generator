@@ -175,7 +175,7 @@
 					{autocomplete}
 					aria-label={filterPlaceholder}
 					oninput={handleInput}
-					class="field-control lg:pointer-fine:text-label focus:surface-control-hover focus-visible:bg-focus-surface! focus-visible:text-focus-foreground! h-11 min-h-11 w-full shrink-0 px-3 text-base forced-colors:bg-[Canvas] forced-colors:text-[CanvasText]"
+					class="field-control field-entry lg:pointer-fine:text-label h-11 min-h-11 w-full shrink-0 px-3 text-base"
 				/>
 				<div
 					role="presentation"

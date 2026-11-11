@@ -58,6 +58,7 @@ export {
 export { motion, prefersReducedMotion } from "./motion";
 export {
 	inputBase,
+	selectBase,
 	labelBase,
 	bodyBase,
 	helperBase,

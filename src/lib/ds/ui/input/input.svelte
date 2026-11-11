@@ -36,7 +36,10 @@
 	const controlRequiredLabel = $derived(ariaRequired ?? fieldProps?.["aria-required"]);
 	const inputClass = $derived(
 		cn(
-			"field-control placeholder:text-muted-foreground focus:surface-control-hover focus-visible:bg-focus-surface! focus-visible:text-focus-foreground! aria-invalid:bg-destructive/20 aria-invalid:placeholder:text-foreground lg:pointer-fine:text-label file:text-foreground focus-visible:file:text-focus-foreground w-full min-w-0 text-base leading-6 file:bg-transparent file:font-medium disabled:cursor-not-allowed forced-colors:bg-[Canvas] forced-colors:text-[CanvasText] motion-reduce:transition-none lg:pointer-fine:leading-5",
+			"field-control placeholder:text-muted-foreground aria-invalid:bg-destructive/20 aria-invalid:placeholder:text-foreground lg:pointer-fine:text-label w-full min-w-0 text-base leading-6 file:bg-transparent file:font-medium file:text-foreground disabled:cursor-not-allowed motion-reduce:transition-none lg:pointer-fine:leading-5",
+			type === "file"
+				? "focus:surface-control-hover focus-visible:bg-focus-surface! focus-visible:text-focus-foreground! focus-visible:file:text-focus-foreground forced-colors:bg-[Canvas] forced-colors:text-[CanvasText]"
+				: "field-entry",
 			className
 		)
 	);

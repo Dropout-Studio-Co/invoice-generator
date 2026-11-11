@@ -51,6 +51,49 @@ test("Button hover preserves physical size across variants while retaining visua
 	assert.match(source, /secondary: "surface-control text-foreground hover:surface-control-hover"/);
 });
 
+/** @param {string} name */
+const variantString = (name) => {
+	const match = source.match(new RegExp(`\\n\\s*${name}:\\s*"([^"]*)"`));
+	assert.ok(match, `${name} variant missing`);
+	return match[1];
+};
+
+test("Action button variants focus on the button focus surface", () => {
+	for (const name of ["destructive", "link", "ghost"]) {
+		const value = variantString(name);
+		assert.match(
+			value,
+			/focus-visible:bg-focus-button-surface!/,
+			`${name} must focus on the button focus surface, not the page focus surface`
+		);
+		assert.match(
+			value,
+			/focus-visible:text-focus-button-foreground!/,
+			`${name} must pair the button focus surface with its foreground`
+		);
+		assert.doesNotMatch(
+			value,
+			/focus-visible:bg-focus-surface!|focus-visible:text-focus-foreground!/,
+			`${name} must not rely on the page focus surface`
+		);
+	}
+});
+
+test("Other button variants keep their unchanged focus contract", () => {
+	for (const name of ["default", "primary"]) {
+		assert.match(variantString(name), /focus-visible:bg-focus-button-surface!/);
+		assert.match(variantString(name), /focus-visible:text-focus-button-foreground!/);
+	}
+	assert.match(source, /focus-visible:bg-focus-surface! focus-visible:text-focus-foreground!/);
+	assert.match(source, /secondary: "surface-control text-foreground hover:surface-control-hover"/);
+	assert.match(source, /outline: "surface-control text-foreground hover:surface-control-hover"/);
+	assert.match(
+		source,
+		/ghost: "[^"]*hover:surface-control-hover[^"]*focus-visible:bg-focus-button-surface![^"]*"/
+	);
+	assert.match(source, /destructive:\s*"[^"]*bg-destructive text-destructive-foreground/);
+});
+
 test("Cta primary keeps semantic hover fill, motion timing, and arrow ownership", () => {
 	for (const value of [
 		"hover:text-primary-hover-foreground",

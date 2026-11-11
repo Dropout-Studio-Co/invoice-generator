@@ -107,7 +107,7 @@
 				aria-required={controlRequiredLabel}
 				disabled={controlDisabled}
 				oninput={handleInput}
-				class="field-control placeholder:text-muted-foreground focus:surface-control-hover focus-visible:bg-focus-surface! focus-visible:text-focus-foreground! lg:pointer-fine:text-label w-full pe-10 text-base leading-6 motion-reduce:transition-none forced-colors:bg-[Canvas] forced-colors:text-[CanvasText] lg:pointer-fine:leading-5"
+				class="field-control field-entry placeholder:text-muted-foreground lg:pointer-fine:text-label w-full pe-10 text-base leading-6 motion-reduce:transition-none lg:pointer-fine:leading-5"
 			/>
 			<BitsCombobox.Trigger
 				aria-label={open ? closeLabel : openLabel}

@@ -44,7 +44,7 @@ test("container focus has a reserved solid sticky marker, not a descendant focus
 		assert.ok(
 			selector
 				.replace(/\s+/g, "")
-				.includes(":not([data-focus-container],[data-focus-container-target])"),
+				.includes(":not([data-focus-container],[data-focus-container-target]"),
 			selector
 		);
 	}
