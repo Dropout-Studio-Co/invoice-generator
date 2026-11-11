@@ -235,10 +235,12 @@ test("the generic inverted-fill rule excludes text-entry controls", () => {
 });
 
 test("text-entry components consume field-entry instead of repeating focus classes", () => {
-	for (const [name, source] of [
+	/** @type {readonly [readonly [string, string], readonly [string, string]]} */
+	const textEntrySources = [
 		["Textarea", textarea],
 		["InputGroup", inputGroup]
-	]) {
+	];
+	for (const [name, source] of textEntrySources) {
 		assert.ok(source.includes("field-entry"), `${name} consumes field-entry`);
 		assert.doesNotMatch(
 			source,
