@@ -51,11 +51,16 @@ test("Button hover preserves physical size across variants while retaining visua
 	assert.match(source, /secondary: "surface-control text-foreground hover:surface-control-hover"/);
 });
 
-/** @param {string} name */
+/**
+ * @param {string} name
+ * @returns {string}
+ */
 const variantString = (name) => {
 	const match = source.match(new RegExp(`\\n\\s*${name}:\\s*"([^"]*)"`));
 	assert.ok(match, `${name} variant missing`);
-	return match[1];
+	const value = match[1];
+	if (typeof value !== "string") throw new Error(`${name} variant has no class string`);
+	return value;
 };
 
 test("Action button variants focus on the button focus surface", () => {

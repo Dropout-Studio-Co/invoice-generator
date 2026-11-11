@@ -3,12 +3,12 @@
 	"kind": "dropout-ds-parity",
 	"mode": "full",
 	"sourceRepository": "https://github.com/beyourahi/dropout-design-system.git",
-	"dsVersion": "3.6.1",
-	"canonicalCommit": "34f17f16560ac2b6e388684ea82a4baaf0d5b27e",
+	"dsVersion": "3.6.3",
+	"canonicalCommit": "30ad7285eaaf71e77cac15e24b48b13630979954",
 	"sourceSubtree": "src/lib",
 	"destination": "src/lib/ds",
 	"fileCount": 261,
-	"treeSha256": "06d60a230cf62e2da624467e7a57021f9f56e2ee94a95815d7e3e956d67f8200",
+	"treeSha256": "748b72a90ea82fc61d269fbfa9704a551ba02865afb56370043baeec8845eea7",
 	"files": [
 		{
 			"path": "adapters/biometric.ts",
@@ -32,8 +32,8 @@
 		},
 		{
 			"path": "button-contract.test.js",
-			"bytes": 4731,
-			"sha256": "b0af6463392a56c6865d92c43e4a9d4c9ce8f49bd41b1dc52f7b387f5bb5194a"
+			"bytes": 4866,
+			"sha256": "5757a358894d9f8f235b06364f5da7ce2511c61583f795f7f68803964e8b2627"
 		},
 		{
 			"path": "icons/brand/Facebook.svelte",
@@ -112,8 +112,8 @@
 		},
 		{
 			"path": "input-contract.test.js",
-			"bytes": 10380,
-			"sha256": "c9f173659d4bdfa5ae5649f2a45b4469bf6894c50efdfbc5f451bfb46821af0c"
+			"bytes": 10504,
+			"sha256": "169755d0ea830e63125234a877b7867f466a6f7ce23ca7f27d5ff7e8e8dad759"
 		},
 		{
 			"path": "motion.ts",
