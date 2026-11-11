@@ -95,27 +95,20 @@
 
 	:where(.field-control, [data-slot]):focus-visible:not(
 			[data-focus-container],
-			[data-focus-container-target]
+			[data-focus-container-target],
+			.field-entry,
+			[data-slot="input-group"],
+			[data-slot="input-otp-slot"]
 		) {
 		outline: none;
 		background-color: var(--focus-surface);
 		color: var(--focus-foreground);
+		transition-duration: 0ms !important;
 	}
 
 	[data-slot="button"]:focus-visible:not([data-focus-container], [data-focus-container-target]) {
 		background-color: var(--focus-button-surface);
 		color: var(--focus-button-foreground);
-	}
-
-	:where(.field-control, [data-slot]):focus-visible:not(
-			[data-focus-container],
-			[data-focus-container-target]
-		) {
-		transition-duration: 0ms !important;
-	}
-
-	:where(.field-control, input, textarea):focus-visible::placeholder {
-		color: var(--focus-foreground) !important;
 	}
 
 	body,
@@ -328,6 +321,183 @@
 	}
 }
 
+/**
+ * Text-entry state contract (Input non-file, Textarea, InputGroup, InputOTP and
+ * raw `.field-control.field-entry` fields). Typing surfaces keep foreground ink
+ * and a visible caret; focus raises the fill and draws the one sanctioned inset
+ * ring. Buttons, links, tabs, tiles and select triggers keep the inverted
+ * fill-focus law.
+ *
+ * Source order is deliberate: the invalid ring and the InputGroup container
+ * rules precede the InputGroup inner-control reset (equal specificity, later
+ * wins), and the autofill block comes last with `:where()`-lowered autofill
+ * specificity so the invalid tint, the destructive ring and the container-owned
+ * reset all survive an autofilled value.
+ *
+ * Hover is lowered through `:where()` so it stays at `.field-entry` specificity
+ * and never outranks the destructive invalid tint or the disabled fill. The
+ * invalid autofill focus rule keeps `[aria-invalid="true"]` outside `:where()`
+ * so it matches the plain invalid ring rule's specificity and wins on order.
+ * The InputGroup container and InputOTP slot re-add one attribute/`:has()` unit
+ * only to outrank their `surface-control` rest fill; their invalid and disabled
+ * utilities are still later in the utilities layer, so those states win.
+ */
+@utility field-entry {
+	caret-color: currentColor;
+	transition: none;
+
+	&::placeholder {
+		color: var(--muted-foreground);
+		opacity: 1;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		&:where(:hover:not(:disabled, [aria-disabled="true"])) {
+			background-color: var(--ds-control-hover);
+		}
+
+		&:has(> [data-slot="input-group-control"]):where(:hover:not(:disabled, [aria-disabled="true"])),
+		&[data-slot="input-otp-slot"]:where(:hover:not(:disabled, [aria-disabled="true"])) {
+			background-color: var(--ds-control-hover);
+		}
+	}
+
+	&:is(:focus, :focus-visible) {
+		background-color: var(--ds-control-hover);
+		color: var(--foreground);
+		box-shadow: inset 0 0 0 2px var(--ring);
+		outline: none;
+	}
+
+	&:is(:focus, :focus-visible)::placeholder {
+		color: var(--muted-foreground);
+	}
+
+	&[aria-invalid="true"]:is(:focus, :focus-visible),
+	&:has(> [aria-invalid="true"]:is(:focus, :focus-visible)) {
+		box-shadow: inset 0 0 0 2px var(--destructive);
+	}
+
+	&[data-active] {
+		background-color: var(--ds-control-hover);
+		color: var(--foreground);
+		box-shadow: inset 0 0 0 2px var(--ring);
+	}
+
+	&:has(> [data-slot="input-group-control"]) {
+		--field-autofill-fill: var(--ds-control-background);
+	}
+
+	&:has(> [data-slot="input-group-control"]):is(:focus-within, :hover) {
+		--field-autofill-fill: var(--ds-control-hover);
+	}
+
+	&:has(> [data-slot="input-group-control"][aria-invalid="true"]) {
+		--field-autofill-fill: color-mix(
+			in oklab,
+			var(--destructive) 20%,
+			var(--ds-control-background)
+		);
+	}
+
+	&:has(> [data-slot="input-group-control"][aria-invalid="true"]):is(:focus-within, :hover) {
+		--field-autofill-fill: color-mix(in oklab, var(--destructive) 20%, var(--ds-control-hover));
+	}
+
+	&:has([data-slot="input-group-control"]:is(:focus, :focus-visible)) {
+		background-color: var(--ds-control-hover);
+		color: var(--foreground);
+		box-shadow: inset 0 0 0 2px var(--ring);
+	}
+
+	&:has([data-slot="input-group-control"][aria-invalid="true"]):has(
+			[data-slot="input-group-control"]:is(:focus, :focus-visible)
+		) {
+		box-shadow: inset 0 0 0 2px var(--destructive);
+	}
+
+	&:where(:-webkit-autofill) {
+		-webkit-text-fill-color: var(--foreground);
+		caret-color: currentColor;
+		box-shadow: inset 0 0 0 1000px var(--ds-control-background);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		&:where(:-webkit-autofill):hover:where(:not(:disabled, [aria-disabled="true"])) {
+			box-shadow: inset 0 0 0 1000px var(--ds-control-hover);
+		}
+	}
+
+	&:where(:-webkit-autofill):is(:focus, :focus-visible) {
+		box-shadow:
+			inset 0 0 0 2px var(--ring),
+			inset 0 0 0 1000px var(--ds-control-hover);
+	}
+
+	&:where([aria-invalid="true"]):where(:-webkit-autofill) {
+		box-shadow: inset 0 0 0 1000px
+			color-mix(in oklab, var(--destructive) 20%, var(--ds-control-background));
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		&:where([aria-invalid="true"]):where(:-webkit-autofill):hover {
+			box-shadow: inset 0 0 0 1000px
+				color-mix(in oklab, var(--destructive) 20%, var(--ds-control-hover));
+		}
+	}
+
+	&[aria-invalid="true"]:where(:-webkit-autofill):is(:focus, :focus-visible) {
+		box-shadow:
+			inset 0 0 0 2px var(--destructive),
+			inset 0 0 0 1000px color-mix(in oklab, var(--destructive) 20%, var(--ds-control-hover));
+	}
+
+	[data-slot="input-group"] > &[data-slot="input-group-control"] {
+		box-shadow: none;
+	}
+
+	[data-slot="input-group"] > &[data-slot="input-group-control"]:where(:hover) {
+		background-color: transparent;
+		outline: none;
+	}
+
+	[data-slot="input-group"] > &[data-slot="input-group-control"]:where(:-webkit-autofill) {
+		-webkit-text-fill-color: var(--foreground);
+		box-shadow: inset 0 0 0 1000px var(--field-autofill-fill, transparent);
+	}
+
+	[data-slot="input-group"] > &[data-slot="input-group-control"]:is(:focus, :focus-visible) {
+		background-color: transparent;
+		box-shadow: none;
+		outline: none;
+	}
+
+	[data-slot="input-group"]
+		> &[data-slot="input-group-control"]:where(:-webkit-autofill):is(:focus, :focus-visible) {
+		box-shadow: inset 0 0 0 1000px var(--field-autofill-fill, transparent);
+	}
+
+	@media (forced-colors: active) {
+		&,
+		&:hover,
+		&:is(:focus, :focus-visible),
+		&[data-active],
+		&:has([data-slot="input-group-control"]:is(:focus, :focus-visible)) {
+			background-color: Field;
+			color: FieldText;
+			box-shadow: none;
+			forced-color-adjust: none;
+		}
+
+		&:is(:focus, :focus-visible),
+		&[data-active],
+		&:has([data-slot="input-group-control"]:is(:focus, :focus-visible)) {
+			outline: 3px solid CanvasText;
+			outline-offset: -3px;
+		}
+	}
+}
+
 html.dark {
 	color-scheme: dark;
 }
@@ -416,30 +586,85 @@ html.dark {
 	}
 
 	:where(
-		.field-control,
+		.field-control:not(.field-entry),
 		[data-slot="select-trigger"],
 		[data-slot="checkbox"],
 		[data-slot="radio-group-item"],
 		[data-slot="switch"],
 		[data-slot="button"],
-		[data-slot="input-group"],
-		[data-slot="input-otp-slot"]
+		[data-slot="input-group"]:not(.field-entry),
+		[data-slot="input-otp-slot"]:not(.field-entry)
 	) {
 		background-color: Highlight;
 		color: HighlightText;
 		forced-color-adjust: none;
 	}
 
+	:where(.field-entry),
+	:where(.field-entry):is(:focus, :focus-visible),
+	:where(.field-entry)[data-active],
+	:where(.field-entry):has([data-slot="input-group-control"]:is(:focus, :focus-visible)) {
+		background-color: Field;
+		color: FieldText;
+		box-shadow: none;
+		forced-color-adjust: none;
+	}
+
+	:where(.field-entry):not([data-slot="input-group-control"], [aria-invalid="true"]) {
+		outline: 1px solid CanvasText;
+		outline-offset: -1px;
+	}
+
+	:where(.field-entry):is(:focus, :focus-visible):not([data-slot="input-group-control"]),
+	:where(.field-entry)[data-active],
+	:where(.field-entry):has([data-slot="input-group-control"]:is(:focus, :focus-visible)) {
+		outline: 3px solid CanvasText;
+		outline-offset: -3px;
+	}
+
+	[data-slot="input-group"] > [data-slot="input-group-control"]:is(:focus, :focus-visible) {
+		outline: none;
+	}
+
+	.field-entry::placeholder {
+		color: GrayText;
+		opacity: 1;
+	}
+
+	.field-entry[aria-invalid="true"]::placeholder {
+		color: MarkText;
+	}
+
+	:where(.field-entry):is(:disabled, [aria-disabled="true"]),
+	:where(.field-entry):has(> [data-slot="input-group-control"]:disabled) {
+		background-color: Field;
+		color: GrayText;
+		forced-color-adjust: none;
+	}
+
+	:where(.field-entry):is(:disabled, [aria-disabled="true"]):not([data-slot="input-group-control"]),
+	:where(.field-entry):has(> [data-slot="input-group-control"]:disabled) {
+		outline: 1px solid GrayText;
+		outline-offset: -1px;
+	}
+
+	[data-slot="input-group"] > [data-slot="input-group-control"]:disabled {
+		color: GrayText;
+	}
+
 	:where(.field-control, [data-slot]):focus-visible:not(
 			[data-focus-container],
-			[data-focus-container-target]
+			[data-focus-container-target],
+			.field-entry,
+			[data-slot="input-group"],
+			[data-slot="input-otp-slot"]
 		),
 	[data-slot="button"]:focus-visible:not([data-focus-container], [data-focus-container-target]) {
 		background-color: CanvasText !important;
 		color: Canvas !important;
 	}
 
-	.field-control::placeholder {
+	.field-control:not(.field-entry)::placeholder {
 		color: HighlightText;
 		opacity: 1;
 	}
@@ -454,7 +679,10 @@ html.dark {
 		color: GrayText;
 	}
 
-	:where([data-slot="button"], .field-control):is(:disabled, [aria-disabled="true"]) {
+	:where([data-slot="button"], .field-control:not(.field-entry)):is(
+		:disabled,
+		[aria-disabled="true"]
+	) {
 		color: HighlightText;
 		opacity: 0.75;
 	}

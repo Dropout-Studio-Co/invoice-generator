@@ -13,6 +13,7 @@
 		error,
 		required = false,
 		disabled = false,
+		hideLabel = false,
 		class: className = "",
 		control,
 		children,
@@ -26,6 +27,7 @@
 		error?: string;
 		required?: boolean;
 		disabled?: boolean;
+		hideLabel?: boolean;
 		class?: string;
 		control?: Snippet<[FieldControlProps]>;
 		children?: Snippet<[FieldControlProps]>;
@@ -61,8 +63,10 @@
 	data-invalid={invalid ? "true" : undefined}
 	data-disabled={disabled ? "true" : undefined}
 >
-	<label for={controlId} class={cn(labelBase, "mb-0", disabled ? "text-disabled-foreground" : "text-foreground")}
-		>{label}{#if required}<span aria-hidden="true"> *</span>{/if}</label
+	<label
+		for={controlId}
+		class={hideLabel ? "sr-only" : cn(labelBase, "mb-0", disabled ? "text-disabled-foreground" : "text-foreground")}
+		>{label}{#if required && !hideLabel}<span aria-hidden="true"> *</span>{/if}</label
 	>
 	{#if control}
 		{@render control(controlProps)}

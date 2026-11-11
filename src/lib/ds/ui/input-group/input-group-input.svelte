@@ -13,11 +13,8 @@
 
 <Input
 	bind:ref
-	data-slot="input-group-control"
-	class={cn(
-		"focus-visible:bg-focus-surface! focus-visible:text-focus-foreground! flex-1 rounded-none bg-transparent disabled:bg-transparent forced-colors:bg-[Canvas] forced-colors:text-[CanvasText]",
-		className
-	)}
+	class={cn("flex-1 rounded-none bg-transparent disabled:bg-transparent", className)}
 	bind:value
 	{...props}
+	data-slot="input-group-control"
 />

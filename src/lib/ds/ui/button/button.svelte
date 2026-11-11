@@ -11,9 +11,10 @@
 					"primary-fill-wipe rounded-full bg-signal text-background uppercase hover:text-primary-hover-foreground focus-visible:bg-focus-button-surface! focus-visible:text-focus-button-foreground! motion-safe:duration-editorial motion-safe:ease-interaction",
 				secondary: "surface-control text-foreground hover:surface-control-hover",
 				outline: "surface-control text-foreground hover:surface-control-hover",
-				ghost: "text-foreground hover:surface-control-hover",
-				destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-				link: "text-foreground underline-offset-4 hover:underline",
+				ghost: "text-foreground hover:surface-control-hover focus-visible:bg-focus-button-surface! focus-visible:text-focus-button-foreground!",
+				destructive:
+					"bg-destructive text-destructive-foreground hover:bg-destructive/90 focus-visible:bg-focus-button-surface! focus-visible:text-focus-button-foreground!",
+				link: "text-foreground underline-offset-4 hover:underline focus-visible:bg-focus-button-surface! focus-visible:text-focus-button-foreground!",
 				icon: "surface-control relative size-10 shrink-0 rounded-full p-0 text-foreground after:absolute after:content-[''] pointer-coarse:min-h-11 pointer-coarse:min-w-11 pointer-coarse:after:size-11",
 				nav: "surface-control rounded-full text-foreground hover:surface-control-hover"
 			},

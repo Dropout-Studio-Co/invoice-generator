@@ -33,7 +33,7 @@
 	bind:this={ref}
 	data-slot={dataSlot}
 	class={cn(
-		"field-control placeholder:text-muted-foreground focus:surface-control-hover focus-visible:bg-focus-surface! focus-visible:text-focus-foreground! aria-invalid:bg-destructive/20 aria-invalid:placeholder:text-foreground lg:pointer-fine:text-label min-h-28 w-full min-w-0 resize-y text-base leading-6 disabled:cursor-not-allowed motion-reduce:transition-none forced-colors:bg-[Canvas] forced-colors:text-[CanvasText] lg:pointer-fine:leading-5",
+		"field-control placeholder:text-muted-foreground field-entry aria-invalid:bg-destructive/20 aria-invalid:placeholder:text-foreground lg:pointer-fine:text-label min-h-28 w-full min-w-0 resize-y text-base leading-6 disabled:cursor-not-allowed motion-reduce:transition-none lg:pointer-fine:leading-5",
 		className
 	)}
 	bind:value

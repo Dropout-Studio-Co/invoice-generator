@@ -10,7 +10,7 @@
 	bind:ref
 	data-slot="input-otp-slot"
 	class={cn(
-		"surface-control data-[active=true]:bg-focus-surface data-[active=true]:text-focus-foreground aria-invalid:bg-destructive/20 text-label duration-fast ease-standard first:rounded-s-control last:rounded-e-control disabled:bg-disabled-background disabled:text-disabled-foreground relative flex size-10 items-center justify-center transition-colors data-[active=true]:z-10 motion-reduce:transition-none",
+		"surface-control field-entry aria-invalid:bg-destructive/20 text-label first:rounded-s-control last:rounded-e-control disabled:bg-disabled-background disabled:text-disabled-foreground relative flex size-10 items-center justify-center data-[active]:z-10 motion-reduce:transition-none",
 		className
 	)}
 	{...restProps}
