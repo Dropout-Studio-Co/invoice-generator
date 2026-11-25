@@ -423,9 +423,9 @@
 							<Table.Root>
 								<Table.Header>
 									<Table.Row class="border-border pointer-fine:hover:bg-transparent">
-										<Table.Head class="text-caption h-8 pl-0 tracking-wider uppercase"
-											>Month</Table.Head
-										>
+										<Table.Head class="text-caption h-8 pl-0 tracking-wider uppercase">
+											Month
+										</Table.Head>
 										<Table.Head
 											class="text-caption h-8 w-[72px] text-center tracking-wider uppercase"
 										>

@@ -130,9 +130,14 @@
 				<span></span>
 			{/if}
 			<div class="flex items-center gap-2">
-				<Button variant="ghost" size="sm" class="touch-manipulation rounded-full" onclick={() => (open = false)}
-					>Cancel</Button
+				<Button
+					variant="ghost"
+					size="sm"
+					class="touch-manipulation rounded-full"
+					onclick={() => (open = false)}
 				>
+					Cancel
+				</Button>
 				<Cta variant="primary" arrow={false} disabled={pending.length === 0 || loading} onclick={confirm}>
 					<span class="inline-flex items-center gap-2">
 						{#if loading}
